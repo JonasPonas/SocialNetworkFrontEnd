@@ -29,7 +29,6 @@
 import axios from "axios";
 import Login from "./Login.vue";
 import Register from "./Register.vue";
-import { mapState } from "vuex";
 
 export default {
   name: "LoginRegister",
@@ -80,10 +79,7 @@ export default {
     register: function () {
       console.log("register");
     },
-  },
-  computed: mapState({
-    userId: (state) => state.account.userId,
-  }),
+  }
 };
 </script>
 <style scoped>
