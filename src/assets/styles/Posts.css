@@ -1,0 +1,72 @@
+body {
+    background: #ede8e5;
+}
+
+#feed {
+    width: 40%;
+    margin: 6rem auto;
+}
+
+#feed ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.post {
+    border: #212020 solid 1px;
+    background: white;
+    margin-bottom: 1rem ;
+    /* border: solid gray 1px; */
+}
+
+.post .poster-info {
+    border-bottom: #212020 solid 1px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.post .poster-info img {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1rem;
+}
+
+.post .poster-info p {
+    color: black;
+    font-weight: bold;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.post .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.post .content img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.post .content p {
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+@media screen and (max-width: 630px) {
+    #feed {
+        margin-top: 12rem;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    #feed {
+        width: 80%;
+    }
+}
