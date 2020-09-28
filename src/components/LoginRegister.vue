@@ -36,6 +36,7 @@ export default {
   data: function () {
     return {
       isShowingLogin: false,
+      errors: [],
       buttonsBackgrounds: {
         login: "button",
         register: "button-selected ",
