@@ -2,11 +2,11 @@
   <div id="container">
     <div id="signin-wrapper">
       <div id="buttons-container">
-        <button v-bind:class="buttonsBackgrounds.login" @click="changeToLogin">
+        <button v-bind:class="buttonsBackgrounds.loginButton" @click="changeToLogin">
           Login
         </button>
         <button
-          v-bind:class="buttonsBackgrounds.register"
+          v-bind:class="buttonsBackgrounds.registerButton"
           @click="changeToRegister"
         >
           Register
@@ -15,7 +15,7 @@
       <div id="login-register-wrapper" v-if="isShowingLogin">
         <login ref="login"></login>
       </div>
-      <div id="login-register-wrapper"  v-else>
+      <div id="login-register-wrapper" v-else>
         <register />
       </div>
       <button id="signin-button" @click="signin">
@@ -37,8 +37,8 @@ export default {
       isShowingLogin: false,
       errors: [],
       buttonsBackgrounds: {
-        login: "button",
-        register: "button selected ",
+        loginButton: "button",
+        registerButton: "button selected ",
       },
     };
   },
@@ -50,14 +50,16 @@ export default {
      this.$store.commit("login", null);
   },
   methods: {
+    swapButtonsBackgrounds: function(loginButtonStyle, registerButtonStyle) {
+      this.buttonsBackgrounds.loginButton = loginButtonStyle;
+      this.buttonsBackgrounds.registerButton = registerButtonStyle;
+    },
     changeToRegister: function () {
-      this.buttonsBackgrounds.login = "button";
-      this.buttonsBackgrounds.register = "button selected";
+      this.swapButtonsBackgrounds("button", "button selected");
       this.isShowingLogin = false;
     },
     changeToLogin: function () {
-      this.buttonsBackgrounds.login = "button selected";
-      this.buttonsBackgrounds.register = "button";
+      this.swapButtonsBackgrounds("button selected", "button");
       this.isShowingLogin = true;
     },
     signin: function () {
