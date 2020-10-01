@@ -127,9 +127,8 @@ export default {
           dateOfBirth: birthday,
           password: password
         })
-        .then((response) => {
+        .then(() => {
           this.showNotification("Registration successfull. You can Login.", false);
-          console.log(response);
         })
         .catch((e) => {
           this.showNotification(e.response.data, true);
