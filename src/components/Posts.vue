@@ -2,11 +2,27 @@
   <div id="posts">
     <ul>
       <li class="post" v-for="post in posts" v-bind:key="post.id">
-        <span class="poster-info">
-          <img v-bind:src="post.profileImage" alt="" />
+        <span
+          class="poster-info"
+          @mouseover="post.posterImageHover = true"
+          @mouseleave="post.posterImageHover = false"
+        >
+          <img
+            v-bind:class="
+              post.posterImageHover ? 'poster-img img-hover' : 'poster-img'
+            "
+            v-bind:src="post.profileImage"
+            alt=""
+          />
           <span class="name-date-wrapper">
-            <p>{{ post.name + " " + post.surname }}</p>
-            <p>{{ dateToTimeAgo(post) }}</p>
+            <p
+              @mouseover="post.nameHover = true"
+              @mouseleave="post.nameHover = false"
+              v-bind:class="post.nameHover ? 'posterName hover' : 'posterName'"
+            >
+              {{ post.name + " " + post.surname }}
+            </p>
+            <p class="date">{{ dateToTimeAgo(post) }}</p>
           </span>
         </span>
         <div class="content">
@@ -25,7 +41,7 @@ export default {
   data: function () {
     return {
       posts: [],
-      errors: [],
+      errors: []
     };
   },
   methods: {
@@ -37,6 +53,11 @@ export default {
           },
         })
         .then((response) => {
+          
+          response.data.forEach(function (post) {
+            post["posterImageHover"] = false;
+            post["nameHover"] = false;
+          });
           this.posts = response.data;
         })
         .catch((e) => {
