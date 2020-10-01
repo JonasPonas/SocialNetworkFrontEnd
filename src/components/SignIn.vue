@@ -12,10 +12,10 @@
           Register
         </button>
       </div>
-      <div v-if="isShowingLogin">
+      <div id="login-register-wrapper" v-if="isShowingLogin">
         <login ref="login"></login>
       </div>
-      <div v-else>
+      <div id="login-register-wrapper"  v-else>
         <register />
       </div>
       <button id="signin-button" @click="signin">
@@ -31,14 +31,14 @@ import Login from "./Login.vue";
 import Register from "./Register.vue";
 
 export default {
-  name: "LoginRegister",
+  name: "SignIn",
   data: function () {
     return {
       isShowingLogin: false,
       errors: [],
       buttonsBackgrounds: {
         login: "button",
-        register: "button-selected ",
+        register: "button selected ",
       },
     };
   },
@@ -46,14 +46,17 @@ export default {
     login: Login,
     register: Register,
   },
+  created() {
+     this.$store.commit("login", null);
+  },
   methods: {
     changeToRegister: function () {
       this.buttonsBackgrounds.login = "button";
-      this.buttonsBackgrounds.register = "button-selected";
+      this.buttonsBackgrounds.register = "button selected";
       this.isShowingLogin = false;
     },
     changeToLogin: function () {
-      this.buttonsBackgrounds.login = "button-selected";
+      this.buttonsBackgrounds.login = "button selected";
       this.buttonsBackgrounds.register = "button";
       this.isShowingLogin = true;
     },
@@ -84,5 +87,5 @@ export default {
 </script>
 <style scoped>
 @import "../assets/styles/LoginRegister.css";
-@import "../assets/styles/Login.css";
+@import "../assets/styles/SignIn.css";
 </style>

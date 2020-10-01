@@ -1,0 +1,61 @@
+#container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-image: url("../233769.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+#signin-wrapper {
+    background: #212020;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    width: 24rem;
+    border-radius: 2%;
+}
+
+#buttons-container {
+    width: 99%;
+    height: 2.5rem;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.button {
+    border: none;
+    width: 50%;
+    height: 100%;
+    background: #2600C9;
+    color: white;
+}
+
+.selected {
+    background: black;
+}
+
+button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+#login-register-wrapper {
+    width: 99%;
+}
+
+/* #2600C9 */
+#signin-button {
+    border: none;
+    margin-top: 0.5rem;
+    width: 6rem;
+    height: 2.5rem;
+    background: #2600C9;
+    color: white;
+    border-radius: 10%;
+}

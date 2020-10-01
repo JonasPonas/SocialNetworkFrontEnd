@@ -1,59 +1,11 @@
-#container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background-image: url("../233769.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-}
-
-#signin-wrapper {
-    background: #212020;
+#inputs-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-    border-radius: 2%;
+    width: 100%;
 }
 
-#buttons-container {
-    height: 2.5rem;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 0.5rem;
-}
-
-.button {
-    border: none;
-    width: 10rem;
-    height: 100%;
-    background: #2600C9;
-    color: white;
-}
-
-.button-selected {
-    border: none;
-    width: 10rem;
-    height: 100%;
-    color: white;
-    background: black;
-}
-
-button:focus {
-    outline: none;
-    box-shadow: none;
-}
-
-/* #2600C9 */
-#signin-button {
-    border: none;
-    margin-top: 0.5rem;
-    width: 6rem;
-    height: 2.5rem;
-    background: #2600C9;
-    color: white;
-    border-radius: 10%;
+#inputs-container input {
+    margin: 0.2rem 0;
+    padding: 5px;
+    width: 100%;
 }
