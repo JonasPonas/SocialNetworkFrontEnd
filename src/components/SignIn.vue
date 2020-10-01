@@ -2,7 +2,10 @@
   <div id="container">
     <div id="signin-wrapper">
       <div id="buttons-container">
-        <button v-bind:class="buttonsBackgrounds.loginButton" @click="changeToLogin">
+        <button
+          v-bind:class="buttonsBackgrounds.loginButton"
+          @click="changeToLogin"
+        >
           Login
         </button>
         <button
@@ -12,11 +15,12 @@
           Register
         </button>
       </div>
+      <p id="errors-list" v-if="signinError !== ''">{{ signinError }}</p>
       <div id="login-register-wrapper" v-if="isShowingLogin">
         <login ref="login"></login>
       </div>
       <div id="login-register-wrapper" v-else>
-        <register />
+        <register ref="register"></register>
       </div>
       <button id="signin-button" @click="signin">
         {{ isShowingLogin ? "Login" : "Register" }}
@@ -35,6 +39,7 @@ export default {
   data: function () {
     return {
       isShowingLogin: false,
+      signinError: "",
       errors: [],
       buttonsBackgrounds: {
         loginButton: "button",
@@ -47,12 +52,13 @@ export default {
     register: Register,
   },
   created() {
-     this.$store.commit("login", null);
+    this.$store.commit("login", null);
   },
   methods: {
-    swapButtonsBackgrounds: function(loginButtonStyle, registerButtonStyle) {
+    swapButtonsBackgrounds: function (loginButtonStyle, registerButtonStyle) {
       this.buttonsBackgrounds.loginButton = loginButtonStyle;
       this.buttonsBackgrounds.registerButton = registerButtonStyle;
+      this.signinError = ""
     },
     changeToRegister: function () {
       this.swapButtonsBackgrounds("button", "button selected");
@@ -68,6 +74,10 @@ export default {
     login: function () {
       const email = this.$refs.login.$refs.loginName.value;
       const password = this.$refs.login.$refs.loginPassword.value;
+      if (email === '' || password === '') {
+        this.signinError = "Fill in all the fields."
+        return;
+      }
       axios
         .post(`http://localhost:5004/login`, {
           email: email,
@@ -75,15 +85,30 @@ export default {
         })
         .then((response) => {
           this.$store.commit("login", response.data);
-          this.$router.push({ name: "Feed"});
+          this.$router.push({ name: "Feed" });
         })
         .catch((e) => {
           this.errors.push(e);
         });
     },
     register: function () {
-      console.log("register");
-    },
+      const name = this.$refs.register.$refs.name.value;
+      const surname = this.$refs.register.$refs.surname.value;
+      const email = this.$refs.register.$refs.email.value;
+      const phone = this.$refs.register.$refs.phone.value;
+      const birthday = this.$refs.register.$refs.birthday.value;
+      const password = this.$refs.register.$refs.password.value;
+      const rPassword = this.$refs.register.$refs.rPassword.value;
+
+      if (name === '' || surname === '' || email === '' || phone === '' 
+      || birthday == '' || password === '' || rPassword === '') {
+        this.signinError = "Fill in all the fields."
+      } else if (password !== rPassword) {
+        this.signinError = "Passwords do not match."
+      } else {
+        console.log("register");
+      }
+    }
   }
 };
 </script>

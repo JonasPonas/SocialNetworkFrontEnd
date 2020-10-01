@@ -28,6 +28,13 @@
     margin-bottom: 0.5rem;
 }
 
+#errors-list {
+    width: 100%;
+    color: red;
+    padding: 0;
+    margin: 0;
+}
+
 .button {
     border: none;
     width: 50%;
