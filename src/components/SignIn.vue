@@ -15,7 +15,7 @@
           Register
         </button>
       </div>
-      <p id="errors-list" v-if="signinError !== ''">{{ signinError }}</p>
+      <p id="error" v-bind:class="'notification ' + notificationColor" v-if="signinError !== ''">{{ signinError }}</p>
       <div id="login-register-wrapper" v-if="isShowingLogin">
         <login ref="login"></login>
       </div>
@@ -41,6 +41,7 @@ export default {
       isShowingLogin: false,
       signinError: "",
       errors: [],
+      notificationColor: 'red',
       buttonsBackgrounds: {
         loginButton: "button",
         registerButton: "button selected ",
@@ -68,6 +69,14 @@ export default {
       this.swapButtonsBackgrounds("button selected", "button");
       this.isShowingLogin = true;
     },
+    showNotification: function(text, isError) {
+      if (isError) {
+        this.notificationColor = 'red';
+      } else {
+        this.notificationColor = 'green'
+      }
+      this.signinError = text;
+    },
     signin: function () {
       this.isShowingLogin ? this.login() : this.register();
     },
@@ -88,6 +97,8 @@ export default {
           this.$router.push({ name: "Feed" });
         })
         .catch((e) => {
+          this.signinError = e.response.data;
+          console.log(e.response.data);
           this.errors.push(e);
         });
     },
@@ -102,11 +113,29 @@ export default {
 
       if (name === '' || surname === '' || email === '' || phone === '' 
       || birthday == '' || password === '' || rPassword === '') {
-        this.signinError = "Fill in all the fields."
+        this.showNotification("Fill in all the fields.", true);
       } else if (password !== rPassword) {
-        this.signinError = "Passwords do not match."
+        this.showNotification("Passwords do not match.", true);
       } else {
         console.log("register");
+        axios
+        .post(`http://localhost:5004/register`, {
+          email: email,
+          name: name,
+          surname: surname,
+          phoneNumber: phone,
+          dateOfBirth: birthday,
+          password: password
+        })
+        .then((response) => {
+          this.showNotification("Registration successfull. You can Login.", false);
+          console.log(response);
+        })
+        .catch((e) => {
+          this.showNotification(e.response.data, true);
+          console.log(e.response.data);
+          this.errors.push(e);
+        });
       }
     }
   }
