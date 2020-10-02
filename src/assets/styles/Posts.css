@@ -15,7 +15,7 @@ body {
 .post {
     border: lightgray solid 1px;
     background: white;
-    margin-bottom: 1rem ;
+    margin-bottom: 1rem;
 }
 
 .post .poster-info {
@@ -37,7 +37,6 @@ body {
 .img-hover {
     height: 4.2rem;
     width: 4.2rem;
-    
 }
 
 .name-date-wrapper {
@@ -47,7 +46,7 @@ body {
     align-items: flex-start;
 }
 
-.post .posterName{
+.post .posterName {
     color: black;
     font-weight: bold;
     margin-top: auto;
@@ -79,8 +78,43 @@ body {
 
 .post .content p {
     margin: 0 auto;
-    padding: 2rem;
+    padding: 1rem;
 }
+
+.post .bottom-buttons {
+    display: flex;
+    background: #242424;
+    width: 100%;
+    color: black;
+    justify-content: flex-end;
+}
+
+.button-container {
+    display: flex;
+    align-items: center;
+}
+
+.button-container span {
+    color: white;
+    margin: 0;
+    padding-top: 0;
+}
+
+.button-container img {
+    padding: 0;
+    margin: 0;
+    filter: none;
+    -webkit-filter: invert(100%);
+}
+
+.button-container button {
+    border: none;
+    background: none;
+    height: 2rem;
+    width: 2rem;
+}
+
+
 
 @media screen and (max-width: 630px) {
     #feed {

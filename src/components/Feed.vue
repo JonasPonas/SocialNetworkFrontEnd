@@ -20,5 +20,4 @@ export default {
 
 <style scoped>
 @import "../assets/styles/Header.css";
-@import "../assets/styles/Posts.css";
 </style>

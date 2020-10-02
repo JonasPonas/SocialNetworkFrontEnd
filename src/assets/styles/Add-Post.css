@@ -1,0 +1,57 @@
+#add-post-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    /* border: 1px solid black; */
+    border: lightgray solid 2px;
+}
+
+#add-post-container #container-name-div {
+    background: #242424;
+    padding: 0.4rem;
+    display: flex;
+    align-items: center;
+    border-bottom: lightgray solid 1px;
+}
+
+#add-post-container #container-name-div p {
+    margin: 0;
+    font-weight: bold;
+    color: white;
+    padding: 0;
+}
+
+#add-post-container #container-name-div button {
+    margin-left: auto;
+    border-radius: 5px;
+    border: none;
+    background: none;
+    max-width:100%;
+    max-height:100%;
+}
+
+#container-name-div button img {
+    filter: none;
+    -webkit-filter: invert(100%);
+    width: 1.2rem;
+    height: 1.2rem;
+    object-fit: cover;
+}
+
+
+#add-post-container #inputs-container {
+    display: flex;
+    background: white;
+    flex-direction: column;
+    padding: 0.2rem 0.4rem 0.4rem;
+}
+
+#inputs-container input{
+    border: gray solid 1px;
+    border-radius: 5px;
+}
+
+#inputs-container textarea {
+    border: gray solid 1px;
+    border-radius: 2px;
+}

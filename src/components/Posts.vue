@@ -1,5 +1,8 @@
 <template>
   <div id="posts">
+
+    <addPost></addPost>
+
     <ul>
       <li class="post" v-for="post in posts" v-bind:key="post.id">
         <span
@@ -28,6 +31,22 @@
         <div class="content">
           <img v-bind:src="post.imageUrl" alt="" />
           <p>{{ post.description }}</p>
+          <div class="bottom-buttons">
+            <div class="button-container">
+              <span>10</span>
+              <button>
+                <img
+                  class="reaction-button"
+                  src="@/assets/comment.png"
+                  alt=""
+                />
+              </button>
+              <span>101</span>
+              <button>
+                <img class="reaction-button" src="@/assets/heart.png" alt="" />
+              </button>
+            </div>
+          </div>
         </div>
       </li>
     </ul>
@@ -36,12 +55,18 @@
 
 <script>
 import axios from "axios";
+import AddPost from "./Add-Post.vue";
 
 export default {
+  components: {
+    addPost: AddPost,
+  },
   data: function () {
     return {
+      postInput: "",
+      postTextArea: "",
       posts: [],
-      errors: []
+      errors: [],
     };
   },
   methods: {
@@ -53,7 +78,6 @@ export default {
           },
         })
         .then((response) => {
-          
           response.data.forEach(function (post) {
             post["posterImageHover"] = false;
             post["nameHover"] = false;
@@ -121,3 +145,7 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@import "../assets/styles/Posts.css";
+</style>
