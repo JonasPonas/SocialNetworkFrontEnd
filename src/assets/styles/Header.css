@@ -9,6 +9,11 @@
     flex-direction: row-reverse;
 }
 
+button {
+    background: none;
+    border: none;
+}
+
 #nav #buttons-and-input {
     flex: 1;
     display: flex;
@@ -21,7 +26,7 @@
     justify-content: flex-start;
 }
 
-#nav .half a {
+#nav .half button {
     color: white;
     text-align: center;
     margin: 0 1rem;
@@ -40,7 +45,7 @@
     justify-content: flex-end;
 }
 
-#nav .profile-wrapper a {
+#nav .profile-wrapper button {
     color: white;
     margin-right: 1rem;
     padding: 1rem;

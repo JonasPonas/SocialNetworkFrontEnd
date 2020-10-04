@@ -7,6 +7,10 @@ body {
     margin: 6rem auto;
 }
 
+.red-backround {
+    background: red;
+}
+
 #posts ul {
     list-style-type: none;
     padding: 0;

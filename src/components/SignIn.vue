@@ -94,7 +94,7 @@ export default {
         })
         .then((response) => {
           this.$store.commit("login", response.data);
-          this.$router.push({ name: "Feed" });
+          this.$router.push({ name: "Feed"});
         })
         .catch((e) => {
           this.signinError = e.response.data;

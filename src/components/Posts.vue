@@ -1,7 +1,6 @@
 <template>
   <div id="posts">
-
-    <addPost></addPost>
+    <addPost v-show="!isProfile"></addPost>
 
     <ul>
       <li class="post" v-for="post in posts" v-bind:key="post.id">
@@ -19,6 +18,7 @@
           />
           <span class="name-date-wrapper">
             <p
+              @click="goTuUsersProfile(post)"
               @mouseover="post.nameHover = true"
               @mouseleave="post.nameHover = false"
               v-bind:class="post.nameHover ? 'posterName hover' : 'posterName'"
@@ -63,28 +63,64 @@ export default {
   },
   data: function () {
     return {
-      postInput: "",
-      postTextArea: "",
+      isProfile: Boolean,
+      userId: Number,
       posts: [],
       errors: [],
+      isFriend: true,
     };
   },
+  watch: {
+    "$route.query.userId"() {
+      this.fetchPosts();
+    },
+  },
   methods: {
-    fetchPosts: function (user) {
+    goTuUsersProfile: function (post) {
+      this.$router
+        .push({
+          name: "Profile",
+          query: { profile: true, userId: post.userId },
+        })
+        .catch(() => {});
+    },
+    fetchPosts: function () {
+      const userId = this.$store.state.account.user.id;
+      this.isProfile = this.$route.query.profile;
+      this.userId = this.$route.query.userId;
+
+      if (userId === this.userId) {
+        this.isFriend = false;
+      } else {
+        this.isFriend = true;
+      }
+
+      var url = "http://localhost:5004/getPostsByUser";
+      if (!this.isProfile || this.isProfile == undefined) {
+        url = "http://localhost:5004/getFriendsPosts";
+      }
+      if (this.userId === undefined) {
+        this.userId = this.$store.state.account.user.id;
+      }
+
       axios
-        .get(`http://localhost:5004/getFriendsPosts`, {
+        .get(url, {
           params: {
-            id: user.id,
+            id: this.userId,
           },
         })
         .then((response) => {
           response.data.forEach(function (post) {
             post["posterImageHover"] = false;
             post["nameHover"] = false;
+            if (post.profileImage == null) {
+              post.profileImage = 'https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg';
+            }
           });
           this.posts = response.data;
         })
         .catch((e) => {
+          console.log(e);
           this.errors.push(e);
         });
     },
@@ -138,10 +174,9 @@ export default {
       }
     },
   },
-
   created() {
-    const user = this.$store.state.account.user;
-    this.fetchPosts(user);
+    // const user = this.$store.state.account.user;
+    this.fetchPosts();
   },
 };
 </script>

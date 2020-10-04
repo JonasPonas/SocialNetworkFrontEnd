@@ -33,6 +33,8 @@ export default {
   data: function () {
     return {
       user: Object,
+      postInput: "",
+      postTextArea: "",
     };
   },
   methods: {

@@ -18,6 +18,3 @@ export default {
 };
 </script>
 
-<style scoped>
-@import "../assets/styles/Header.css";
-</style>

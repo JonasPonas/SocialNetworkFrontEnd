@@ -11,7 +11,7 @@
     padding: 0.4rem;
     display: flex;
     align-items: center;
-    border-bottom: lightgray solid 1px;
+    /* border-bottom: lightgray solid 1px; */
 }
 
 #add-post-container #container-name-div p {
@@ -42,6 +42,7 @@
 #add-post-container #inputs-container {
     display: flex;
     background: white;
+     /* #4B413C; */
     flex-direction: column;
     padding: 0.2rem 0.4rem 0.4rem;
 }
