@@ -3,7 +3,7 @@ body {
 }
 
 #posts {
-    width: 50%;
+    width: 40%;
     margin: 6rem auto;
 }
 
@@ -85,12 +85,57 @@ body {
     padding: 1rem;
 }
 
+.content .edit {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.delete-button {
+    color: white;
+    width: 5rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+
+    margin-top: 1.2rem;
+    float: right;
+}
+
+.delete-button img {
+    height: 1.5rem;
+    width: 1.5rem;
+    object-fit: cover;
+    /* https://codepen.io/sosuke/pen/Pjoqqp */
+    filter: invert(17%) sepia(55%) saturate(6646%) hue-rotate(6deg) brightness(96%) contrast(103%);
+}
+
+.content textarea {
+    padding: 0.5rem;
+    margin: 0.5rem;
+}
+
 .post .bottom-buttons {
     display: flex;
     background: #242424;
     width: 100%;
     color: black;
     justify-content: flex-end;
+}
+
+.edit-buttons-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-left: 0;
+    /* background: chartreuse; */
+}
+
+.edit-button{
+    background: black;
+    color: white;
+    width: 5rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    margin: 0.5rem;
 }
 
 .button-container {

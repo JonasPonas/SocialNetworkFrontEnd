@@ -3,7 +3,7 @@
     <addPost v-show="!isProfile"></addPost>
 
     <ul>
-      <li class="post" v-for="post in posts" v-bind:key="post.id">
+      <li class="post" v-for="(post, index) in posts" v-bind:key="post.id">
         <span
           class="poster-info"
           @mouseover="post.posterImageHover = true"
@@ -18,7 +18,7 @@
           />
           <span class="name-date-wrapper">
             <p
-              @click="goTuUsersProfile(post)"
+              @click="goToUsersProfile(post)"
               @mouseover="post.nameHover = true"
               @mouseleave="post.nameHover = false"
               v-bind:class="post.nameHover ? 'posterName hover' : 'posterName'"
@@ -28,11 +28,43 @@
             <p class="date">{{ dateToTimeAgo(post) }}</p>
           </span>
         </span>
+        <button
+          v-if="post.isEditing"
+          class="delete-button"
+          @click="deletePost(post)"
+        >
+          <img src="@/assets/delete_icon.png" alt="">
+        </button>
+
         <div class="content">
           <img v-bind:src="post.imageUrl" alt="" />
-          <p>{{ post.description }}</p>
+          <p v-if="!post.isEditing">
+            {{ post.description }}
+          </p>
+          <div class="edit" v-else>
+            <textarea
+              :ref="'textArea-' + index"
+              :value="post.description"
+              type="text"
+              rows="4"
+            >
+            </textarea>
+          </div>
+
           <div class="bottom-buttons">
+            <div class="edit-buttons-wrapper" v-if="post.isEditing">
+                <button class="edit-button" @click="saveEdit(post, index)">
+                  Save
+                </button>
+                <button class="edit-button" @click="editPost(post)">
+                  Cancel
+                </button>
+              </div>
             <div class="button-container">
+              
+              <button v-if="isUsersProfile" @click="editPost(post)">
+                <img class="reaction-button" src="@/assets/edit.png" alt="" />
+              </button>
               <span>10</span>
               <button>
                 <img
@@ -56,6 +88,8 @@
 <script>
 import axios from "axios";
 import AddPost from "./Add-Post.vue";
+import { TimeAgo } from "../modules/TimeAgo";
+import { ipAddress } from '../modules/Constants'
 
 export default {
   components: {
@@ -63,11 +97,11 @@ export default {
   },
   data: function () {
     return {
-      isProfile: Boolean,
+      isProfile: false,
+      isUsersProfile: false,
       userId: Number,
       posts: [],
       errors: [],
-      isFriend: true,
     };
   },
   watch: {
@@ -76,7 +110,30 @@ export default {
     },
   },
   methods: {
-    goTuUsersProfile: function (post) {
+    editPost: function (post) {
+      console.log(post.description);
+      post.isEditing = !post.isEditing;
+    },
+    saveEdit: function (post, index) {
+      const newDescription = this.$refs["textArea-" + index][0].value;
+      post.description = newDescription;
+      post.isEditing = false;
+      axios
+        .post(ipAddress + `/updateContentDescription`, {
+          contentId: post.contentId,
+          description: newDescription,
+        })
+        .then(() => {})
+        .catch((e) => {
+          this.signinError = e.response.data;
+          console.log(e.response.data);
+          this.errors.push(e);
+        });
+    },
+    dateToTimeAgo: function (post) {
+      return TimeAgo.dateToTimeAgo(post);
+    },
+    goToUsersProfile: function (post) {
       this.$router
         .push({
           name: "Profile",
@@ -84,25 +141,27 @@ export default {
         })
         .catch(() => {});
     },
-    fetchPosts: function () {
+    figureIfItsUsersProfile: function () {
       const userId = this.$store.state.account.user.id;
+      if (this.posts.length > 0) {
+        if (this.posts[0].userId === userId) {
+          this.isUsersProfile = true;
+        } else {
+          this.isUsersProfile = false;
+        }
+      }
+    },
+    fetchPosts: function () {
       this.isProfile = this.$route.query.profile;
       this.userId = this.$route.query.userId;
 
-      if (userId === this.userId) {
-        this.isFriend = false;
-      } else {
-        this.isFriend = true;
-      }
-
-      var url = "http://localhost:5004/getPostsByUser";
+      var url = ipAddress + "/getPostsByUser";
       if (!this.isProfile || this.isProfile == undefined) {
-        url = "http://localhost:5004/getFriendsPosts";
+        url = ipAddress + "/getFriendsPosts";
       }
       if (this.userId === undefined) {
         this.userId = this.$store.state.account.user.id;
       }
-
       axios
         .get(url, {
           params: {
@@ -113,69 +172,40 @@ export default {
           response.data.forEach(function (post) {
             post["posterImageHover"] = false;
             post["nameHover"] = false;
+            post["isEditing"] = false;
             if (post.profileImage == null) {
-              post.profileImage = 'https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg';
+              post.profileImage =
+                "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
             }
           });
           this.posts = response.data;
+          this.figureIfItsUsersProfile();
         })
         .catch((e) => {
           console.log(e);
           this.errors.push(e);
         });
     },
-    dateToTimeAgo: function (post) {
-      const postDate = new Date(post.date);
-      const currDate = new Date();
-      var milisecondsAgo = currDate.getTime() - postDate.getTime();
-      var secondsAgo = milisecondsAgo / 1000;
-      var minutesAgo = secondsAgo / 60;
-      var hoursAgo = minutesAgo / 60;
-      var daysAgo = hoursAgo / 24;
-      var weeksAgo = daysAgo / 7;
-      var monthsAgo = weeksAgo / 4;
-      var yearsAgo = monthsAgo / 12;
-
-      if (secondsAgo < 60) {
-        if (Math.floor(secondsAgo) === 1) {
-          return Math.floor(secondsAgo) + " second " + "ago";
-        }
-        return Math.floor(secondsAgo) + " seconds " + "ago";
-      } else if (minutesAgo < 60) {
-        if (Math.floor(minutesAgo) === 1) {
-          return Math.floor(minutesAgo) + " minute " + "ago";
-        }
-        return Math.floor(minutesAgo) + " minutes " + "ago";
-      } else if (hoursAgo < 24) {
-        if (Math.floor(hoursAgo) === 1) {
-          return Math.floor(hoursAgo) + " hour " + "ago";
-        }
-        return Math.floor(hoursAgo) + " hours " + "ago";
-      } else if (daysAgo < 7) {
-        if (Math.floor(daysAgo) === 1) {
-          return Math.floor(daysAgo) + " day " + "ago";
-        }
-        return Math.floor(daysAgo) + " days " + "ago";
-      } else if (weeksAgo < 4) {
-        if (Math.floor(weeksAgo) === 1) {
-          return Math.floor(weeksAgo) + " week " + "ago";
-        }
-        return Math.floor(weeksAgo) + " weeks " + "ago";
-      } else if (monthsAgo < 12) {
-        if (Math.floor(monthsAgo) === 1) {
-          return Math.floor(monthsAgo) + " month " + "ago";
-        }
-        return Math.floor(monthsAgo) + " months " + "ago";
-      } else {
-        if (Math.floor(yearsAgo) === 1) {
-          return Math.floor(yearsAgo) + " year " + "ago";
-        }
-        return Math.floor(yearsAgo) + " years " + "ago";
-      }
+    deletePost: function (post) {
+      const contentId = post.contentId;
+      axios
+        .delete(ipAddress + "/deletePost", {
+          params: {
+            contentId: contentId,
+          },
+        })
+        .then(() => {
+          this.posts = this.posts.filter((post) => {
+            return post.contentId !== contentId;
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+          this.errors.push(e);
+        });
     },
   },
   created() {
-    // const user = this.$store.state.account.user;
     this.fetchPosts();
   },
 };

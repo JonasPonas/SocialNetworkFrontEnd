@@ -33,6 +33,7 @@
 import axios from "axios";
 import Login from "./Login.vue";
 import Register from "./Register.vue";
+import { ipAddress } from '../modules/Constants'
 
 export default {
   name: "SignIn",
@@ -88,7 +89,7 @@ export default {
         return;
       }
       axios
-        .post(`http://localhost:5004/login`, {
+        .post(ipAddress + `/login`, {
           email: email,
           password: password,
         })
@@ -119,7 +120,7 @@ export default {
       } else {
         console.log("register");
         axios
-        .post(`http://localhost:5004/register`, {
+        .post(ipAddress + `/register`, {
           email: email,
           name: name,
           surname: surname,

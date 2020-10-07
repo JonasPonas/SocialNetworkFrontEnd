@@ -41,7 +41,7 @@
 
 #add-post-container #inputs-container {
     display: flex;
-    background: white;
+    background: #4B413C;
      /* #4B413C; */
     flex-direction: column;
     padding: 0.2rem 0.4rem 0.4rem;
