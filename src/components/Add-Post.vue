@@ -28,6 +28,7 @@
 
 <script>
 import axios from "axios";
+import { ipAddress } from '../modules/Constants'
 
 export default {
   data: function () {
@@ -49,7 +50,7 @@ export default {
       }
       if (url !== "" || description !== "") {
         axios
-          .post(`http://localhost:5004/addPost`, {
+          .post(ipAddress + `/addPost`, {
             description: description,
             userId: user.id,
             imageURL: url,

@@ -163,17 +163,23 @@ body {
     width: 2rem;
 }
 
-
-
-@media screen and (max-width: 630px) {
-    #feed {
-        margin-top: 12rem;
-        width: 100%;
+@media screen and (max-width: 1200px) {
+    #posts {
+        width: 50%;
     }
 }
-
-@media screen and (max-width: 900px) {
-    #feed {
+@media screen and (max-width: 1000px) {
+    #posts {
+        margin-top: 6rem;
         width: 80%;
     }
 }
+@media screen and (max-width: 630px) {
+    #posts {
+        margin-top: 12rem;
+        width: 96%;
+    }
+}
+
+
+
