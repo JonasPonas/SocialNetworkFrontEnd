@@ -9,9 +9,36 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import App from './App.vue'
 import router from './router'
+import VueSession from 'vue-session'
 
-Vue.use(BootstrapVue, axios, VueAxios)
+axios.defaults.withCredentials = true
+// axios.create({ withCredentials: true, })
+
+// const instance = axios.create({
+//   withCredentials: true,
+//   baseURL: "http://localhost:5004"
+// })
+var options = {
+  persist: true
+}
+Vue.use(BootstrapVue, axios, VueAxios, VueSession, options)
 Vue.config.productionTip = false
+
+Vue.directive('click-outside', {
+  bind: function (el, binding, vnode) {
+    el.clickOutsideEvent = function (event) {
+      // here I check that click was outside the el and his children
+      if (!(el == event.target || el.contains(event.target))) {
+        // and if it did, call method provided in attribute value
+        vnode.context[binding.expression](event);
+      }
+    };
+    document.body.addEventListener('click', el.clickOutsideEvent)
+  },
+  unbind: function (el) {
+    document.body.removeEventListener('click', el.clickOutsideEvent)
+  },
+});
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {

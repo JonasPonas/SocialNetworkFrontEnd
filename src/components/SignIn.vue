@@ -55,6 +55,7 @@ export default {
   },
   created() {
     this.$store.commit("login", null);
+    axios.defaults.withCredentials = true
   },
   methods: {
     swapButtonsBackgrounds: function (loginButtonStyle, registerButtonStyle) {
@@ -92,8 +93,11 @@ export default {
         .post(ipAddress + `/login`, {
           email: email,
           password: password,
-        })
+        }, {withCredentials: true})
         .then((response) => {
+          console.log(response.headers);
+          // this.$session.start();
+          // this.$session.set('jwt', response.body.token);
           this.$store.commit("login", response.data);
           this.$router.push({ name: "Feed"});
         })

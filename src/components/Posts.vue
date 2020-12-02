@@ -152,6 +152,7 @@ export default {
       }
     },
     fetchPosts: function () {
+      
       this.isProfile = this.$route.query.profile;
       this.userId = this.$route.query.userId;
 
@@ -167,7 +168,7 @@ export default {
           params: {
             id: this.userId,
           },
-        })
+        }, {withCredentials: true})
         .then((response) => {
           response.data.forEach(function (post) {
             post["posterImageHover"] = false;
