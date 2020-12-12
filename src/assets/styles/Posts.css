@@ -17,9 +17,11 @@ body {
 }
 
 .post {
+    border-radius: 5px;
     border: lightgray solid 1px;
-    background: white;
+    background: #303030;
     margin-bottom: 1rem;
+    overflow: hidden;
 }
 
 .post .poster-info {
@@ -51,7 +53,7 @@ body {
 }
 
 .post .posterName {
-    color: black;
+    color: white;
     font-weight: bold;
     margin-top: auto;
     margin-bottom: auto;
@@ -84,6 +86,7 @@ body {
 .post .content p {
     margin: 0 auto;
     padding: 1rem;
+    color: white;
 }
 
 .content .edit {
