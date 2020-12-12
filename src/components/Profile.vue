@@ -48,7 +48,7 @@ export default {
         .get(ipAddress + "/userInfo", {
           params: {
             userId: this.userId,
-          },
+          }
         })
         .then((response) => {
           this.user = response.data[0];
@@ -100,10 +100,13 @@ export default {
 
 <style scoped>
 #left-column {
+  background: #212020;
   position: fixed;
-  top: 5rem;
+  top: 3rem;
   width: 28%;
-  margin-left: 1%;
+  height: 100%;
+  padding: 0 1rem;
+  /* margin-left: 1%; */
   overflow: auto;
   box-sizing: border-box;
   /* overflow: scroll; */
