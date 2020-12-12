@@ -14,8 +14,6 @@
       <div id="buttons-and-input">
         <div class="half">
           <button @click="onClickTab(false)">Feed</button>
-          <button href="">Chat</button>
-          <button href="">Friends</button>
         </div>
         <div id="search-bar">
           <SearchBar/>
