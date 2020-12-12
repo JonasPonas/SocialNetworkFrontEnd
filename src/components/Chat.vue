@@ -57,7 +57,7 @@ export default {
   padding: 0 0.5rem 0.5rem 0.5rem;
 }
 .chat-wrapper .header {
-    margin-top: 0.4rem;
+  margin-top: 0.4rem;
   color: lightgray;
   /* font-size: 18px; */
   padding: 0 0.5rem;

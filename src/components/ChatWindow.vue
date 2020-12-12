@@ -146,6 +146,7 @@ export default {
   display: flex;
   flex-direction: column;
   overflow: scroll;
+  background: #363636;
 }
 .message {
   margin: 0.5rem;
@@ -170,8 +171,11 @@ export default {
 }
 .message-input input {
   height: 2.5rem;
-  width: 80%;
-  border: none;
+  width: calc(80% - 0.3rem);
+  margin: 0.2rem 0;
+  margin-left: 0.3rem;
+  border: 1px solid black;
+  border-radius: 5px;
 }
 
 .message-input button {

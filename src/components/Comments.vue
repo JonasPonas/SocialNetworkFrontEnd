@@ -78,7 +78,7 @@ export default {
   margin: 0.4rem 0.4rem;
 }
 .input-wrapper p {
-  margin: 0.5rem;
+  margin: 0 0.5rem;
 }
 .input-wrapper textarea {
   margin: 0 1rem;
@@ -87,10 +87,10 @@ export default {
   width: calc(100% - 2rem);
 }
 .input-wrapper button {
-  color: black;
+  color: white;
   margin: 0.5rem 1rem;
   padding: 0.2rem 1rem;
-  background: white;
+  background: #121212;
   border-radius: 5px;
 }
 </style>
