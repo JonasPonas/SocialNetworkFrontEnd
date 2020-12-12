@@ -5,13 +5,21 @@
       <div id="user-info">
         <img v-bind:src="user.imageURL" alt="" />
         <p id="name">{{ user.name + " " + user.surname }}</p>
-        <p v-if="user.city != null">{{user.city + ", " + user.country}}</p>
+        <p v-if="user.city != null">{{ user.city + ", " + user.country }}</p>
         <p>Birthday: {{ formatDate(user.dateOfBirth) }}</p>
+        <button class="btn btn-primary" v-if="showFriendInvite" @click="sendFriendInvite">
+          Send Friend Invite
+        </button>
       </div>
 
       <div id="friends">
-        <p>Friends ({{friends.length}})</p>
-        <div v-for="friend in friends" :key="friend.id" class="friend" @click="friendClicked(friend.id)">
+        <p>Friends ({{ friends.length }})</p>
+        <div
+          v-for="friend in friends"
+          :key="friend.id"
+          class="friend"
+          @click="friendClicked(friend.id)"
+        >
           <img v-bind:src="friend.imageUrl" alt="" />
           <p>{{ friend.name }}</p>
         </div>
@@ -29,29 +37,49 @@ export default {
   components: {
     feed: Feed,
   },
+  name: "Profile",
   data: function () {
     return {
       user: {},
       friends: [],
       userId: "",
+      showFriendInvite: false,
     };
   },
   methods: {
     formatDate(dateString) {
       var timestamp = Date.parse(dateString);
       var date = new Date(timestamp);
-      var options = { year: 'numeric', month: 'long', day: 'numeric' };
+      var options = { year: "numeric", month: "long", day: "numeric" };
       return date.toLocaleDateString("en-US", options);
+    },
+    sendFriendInvite() {
+      let fromUser = this.$store.state.account.user.id;
+
+      axios.post(ipAddress + '/sendFriendInvite', {
+        fromUser: fromUser,
+        toUser: this.userId
+      }).then(() => {
+        alert('friend invite sent!')
+      }).catch((e) => {
+        console.log(e);
+        alert('could not send friend invite');
+      })
     },
     getUserInfo() {
       axios
         .get(ipAddress + "/userInfo", {
           params: {
             userId: this.userId,
-          }
+          },
         })
         .then((response) => {
           this.user = response.data[0];
+          if (this.user.imageURL == undefined) {
+            console.log("--->", this.userId);
+            this.user.imageURL =
+              "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -66,6 +94,13 @@ export default {
         })
         .then((response) => {
           this.friends = response.data;
+          let toUser = this.$store.state.account.user.id;
+          let f = this.friends.map((f) => {
+            return f.id == toUser;
+          }).length;
+          if (f == 0 && toUser != this.userId) {
+            this.showFriendInvite = true;
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -88,6 +123,7 @@ export default {
   created() {
     // this.user = this.$store.state.account.user;
     // console.log(this.$store.state.account.user);
+
     this.init();
   },
   watch: {
@@ -131,7 +167,6 @@ export default {
   justify-content: center;
   padding: 0.6rem 0;
   height: 50%;
-  
 }
 
 #friends {

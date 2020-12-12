@@ -7,10 +7,20 @@
       @input="search"
       v-model="txt"
     />
-    <div v-if="dropdownVisible" v-click-outside="hideDropdown" id="myDropdown" class="dropdown-content">
-      <a v-for="user in users" :key="user.id" href="#" @click="userClicked(user.id)">
-        <img v-bind:src="user.imageUrl" alt="">
-        {{user.name + " " + user.surname}}
+    <div
+      v-if="dropdownVisible"
+      v-click-outside="hideDropdown"
+      id="myDropdown"
+      class="dropdown-content"
+    >
+      <a
+        v-for="user in users"
+        :key="user.id"
+        href="#"
+        @click="userClicked(user.id)"
+      >
+        <img v-bind:src="user.imageUrl" alt="" />
+        {{ user.name + " " + user.surname }}
       </a>
     </div>
   </div>
@@ -35,8 +45,10 @@ export default {
           name: "Profile",
           query: { profile: true, userId: userId },
         })
-        .catch(() => {});
-        this.dropdownVisible = false;
+        .catch((e) => {
+          console.log(e);
+        });
+      this.dropdownVisible = false;
     },
     hideDropdown() {
       this.dropdownVisible = false;
@@ -49,11 +61,12 @@ export default {
           .post(ipAddress + "/searchUser", { fullName: this.txt })
           .then((response) => {
             this.users = response.data;
-            this.users.forEach(u => {
+            this.users.forEach((u) => {
               if (u.imageUrl == null) {
-                u.imageUrl = "https://static.wixstatic.com/media/142313_2fdcee04ff144161a745c651458666ac~mv2.png/v1/crop/x_14,y_0,w_299,h_326/fill/w_240,h_274,al_c,q_85,usm_0.66_1.00_0.01/no-user.webp";
+                u.imageUrl =
+                  "https://static.wixstatic.com/media/142313_2fdcee04ff144161a745c651458666ac~mv2.png/v1/crop/x_14,y_0,w_299,h_326/fill/w_240,h_274,al_c,q_85,usm_0.66_1.00_0.01/no-user.webp";
               }
-            })
+            });
             console.log(this.users);
           })
           .catch((e) => {

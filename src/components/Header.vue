@@ -14,9 +14,49 @@
       <div id="buttons-and-input">
         <div class="half">
           <button @click="onClickTab(false)">Feed</button>
+
+          <div id="dropdown">
+            <span
+              style="color: white; margin-right: 1rem"
+              @mouseover="dropdownVisible = true"
+              >Invites</span
+            >
+            <div
+              v-if="dropdownVisible"
+              class="dropdown-content"
+              v-click-outside="hide"
+            >
+              <div
+                class="invite-wrapper"
+                v-for="friendInvite in friendInvites"
+                :key="friendInvite.id"
+              >
+                <p>
+                  <img v-bind:src="getInviteImage(friendInvite)" alt="" />
+                  {{ friendInvite.name + " " + friendInvite.surname }}
+                </p>
+                <div class="invite-buttons">
+                  <button
+                    @click="acceptInvite(friendInvite)"
+                    class="btn"
+                    style="background: lightGreen; color: black"
+                  >
+                    Accept
+                  </button>
+                  <button
+                    @click="rejectInvite(friendInvite)"
+                    class="btn"
+                    style="background: tomato"
+                  >
+                    Reject
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div id="search-bar">
-          <SearchBar/>
+          <SearchBar />
         </div>
       </div>
     </div>
@@ -24,15 +64,65 @@
 </template>
 
 <script>
-
-import SearchBar from './SearchBar.vue';
+import axios from "axios";
+import SearchBar from "./SearchBar.vue";
+import { ipAddress } from "../modules/Constants";
 export default {
   components: {
-    SearchBar
+    SearchBar,
   },
- 
+  data() {
+    return {
+      dropdownVisible: false,
+      friendInvites: [],
+    };
+  },
   methods: {
-
+    hide() {
+      this.dropdownVisible = false;
+    },
+    acceptInvite(invite) {
+      console.log(invite);
+      let toUser = this.$store.state.account.user.id;
+      axios.post(ipAddress + '/acceptFriendInvite', {
+          fromUser: invite.id,
+          toUser: toUser
+      }).then(() => {
+        this.getFriendInvites()
+      }).catch(e => {
+        console.log(e);
+      })
+    },
+    rejectInvite(invite) {
+      let toUser = this.$store.state.account.user.id;
+      axios.post(ipAddress + '/rejectFriendInvite', {
+          fromUser: invite.id,
+          toUser: toUser
+      }).then(() => {
+        this.getFriendInvites()
+      }).catch(e => {
+        console.log(e);
+      })
+    },
+    getFriendInvites() {
+      let id = this.$store.state.account.user.id;
+      axios
+        .get(ipAddress + "/getFriendInvites", {
+          params: {
+            id: id,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.friendInvites = response.data;
+        });
+    },
+    getInviteImage(invite) {
+      if (invite.imageUrl) {
+        return invite.imageUrl;
+      }
+      return "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
+    },
     getProfileImage: function () {
       const imageUrl = this.$store.state.account.user.imageURL;
       if (imageUrl == null) {
@@ -51,9 +141,55 @@ export default {
       }
     },
   },
+  created() {
+    this.getFriendInvites();
+  },
 };
 </script>
 
 <style scoped>
 @import "../assets/styles/Header.css";
+.dropdown-content a {
+  color: white;
+  position: absolute;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0.5rem 1rem;
+}
+#dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.invite-wrapper {
+  background: #121212;
+  padding: 0.4rem;
+  margin: 0.2rem 0;
+  border-radius: 5px;
+}
+
+.dropdown-content {
+  position: absolute;
+  background-color: #242424;
+  margin: 0.4rem;
+  color: white;
+  min-width: 360px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  padding: 12px 16px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+.invite-buttons {
+  display: flex;
+  justify-content: space-around;
+}
+.invite-buttons button {
+  flex: 1;
+  padding: 0.2rem !important;
+  /* height: 1rem; */
+  padding: 0;
+}
 </style>
