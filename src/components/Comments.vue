@@ -7,8 +7,8 @@
         <p >{{ comment.text }}</p>
       </div>
     </div>
-    <div class="input user">
-      <p for="">Add comment</p>
+    <div class="input-wrapper">
+      <p style="background: none;" for="">Add comment</p>
       <textarea v-model="comment" name="" id="" cols="3" rows="3"></textarea>
       <button @click="addComment">Send</button>
     </div>
@@ -42,7 +42,7 @@ export default {
 <style scoped>
 .wrapper {
   width: 100%;
-  background: #242424;
+  background: #121212;
   border: 1px solid black;
 }
 .comment {
@@ -71,19 +71,22 @@ export default {
   background: white;
   color: black;
 }
-.input {
+.input-wrapper {
   color: white;
+  background: #363636;
+  border-radius: 10px;
+  margin: 0.4rem 0.4rem;
 }
-.input p {
+.input-wrapper p {
   margin: 0.5rem;
 }
-.input textarea {
+.input-wrapper textarea {
   margin: 0 1rem;
   max-height: 3rem;
   min-height: 3rem;
   width: calc(100% - 2rem);
 }
-.input button {
+.input-wrapper button {
   color: black;
   margin: 0.5rem 1rem;
   padding: 0.2rem 1rem;

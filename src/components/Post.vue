@@ -64,7 +64,7 @@
 
           <button>
             <img
-              @click="showComments(post, !showComments)"
+              @click="showComments(!showingComments)"
               class="reaction-button"
               src="@/assets/comment.png"
               alt=""
@@ -107,8 +107,7 @@ export default {
             postId: this.post.postId,
             text: comment,
             fromUser: fromUser
-        }).then(response => {
-            console.log(response);
+        }).then(() => {
             this.showComments(true)
         }).catch(e => {
             console.log(e);
@@ -131,11 +130,9 @@ export default {
         });
     },
     editPost: function (post) {
-      console.log(post.description);
       post.isEditing = !post.isEditing;
     },
     saveEdit: function () {
-      console.log(this.$refs["textArea-" + this.index]);
       const newDescription = this.$refs["textArea-" + this.index].value;
       this.post.description = newDescription;
       this.post.isEditing = false;
@@ -147,7 +144,6 @@ export default {
         .then(() => {})
         .catch((e) => {
           this.signinError = e.response.data;
-          console.log(e.response.data);
           this.errors.push(e);
         });
     },
@@ -174,7 +170,6 @@ export default {
         })
         .then((response) => {
           this.comments = response.data;
-          console.log(response.data);
         });
     },
   },

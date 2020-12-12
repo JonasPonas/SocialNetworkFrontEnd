@@ -1,48 +1,53 @@
 <template>
-  <div class="chat-wrapper">
-    <p class="header">Friends</p>
-    <div v-for="friend in friends" :key="friend.id">
-      <div class="person" @click="toggleChat(friend)">
-        <img class="img-wrapper" :src="friend.imageUrl" alt="" />
-        <p>
-          {{ friend.name + " " + friend.surname }}
-        </p>
+  <div class="wrapper-p">
+    <div class="chat-wrapper">
+      <p class="header">Friends</p>
+      <div v-for="friend in friends" :key="friend.id">
+        <div class="person" @click="toggleChat(friend)">
+          <img class="img-wrapper" :src="friend.imageUrl" alt="" />
+          <p style="font-size: 20px">
+            {{ friend.name + " " + friend.surname }}
+          </p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
-
 export default {
   name: "Chat",
   props: {
-      friends: Array,
+    friends: Array,
   },
 
   methods: {
     toggleChat(friend) {
-        this.$emit('showChat', friend)
+      this.$emit("showChat", friend);
     },
-
   },
-
 };
 </script>
 
 <style scroped>
-.chat-wrapper {
+.wrapper-p {
+  /* padding: 0.5rem; */
   position: fixed;
   right: 0;
   top: 0;
-  width: 18%;
+  width: 28%;
+  padding: 1rem;
   background: #212020;
   height: 100%;
-  margin-top: 3rem;
+  margin-top: 2rem;
   padding-top: 1rem;
   display: flex;
   flex-direction: column;
+}
+.chat-wrapper {
+  background: #303030;
+  padding: 0.7rem;
+  height: 100%;
   /* align-items: center; */
 }
 
@@ -52,6 +57,7 @@ export default {
   padding: 0 0.5rem 0.5rem 0.5rem;
 }
 .chat-wrapper .header {
+    margin-top: 0.4rem;
   color: lightgray;
   /* font-size: 18px; */
   padding: 0 0.5rem;
@@ -68,8 +74,8 @@ export default {
 }
 
 .img-wrapper {
-  width: 2rem;
-  height: 2rem;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
   object-fit: cover;
   overflow: hidden;

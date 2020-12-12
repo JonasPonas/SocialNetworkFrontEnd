@@ -123,9 +123,9 @@ export default {
 
 #user-info {
   /* margin-top: 4rem; */
-  background: white;
+  background: #303030;
+  color: white;
   align-items: center;
-  border: solid 1px lightgray;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -136,8 +136,9 @@ export default {
 
 #friends {
   display: flex;
-  background: white;
-  border: solid 1px lightgray;
+  background: #303030;
+  color: white;
+  /* border: solid 1px lightgray; */
   flex-wrap: wrap;
   margin-top: 1rem;
   height: 50%;
