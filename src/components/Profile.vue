@@ -20,7 +20,7 @@
           class="friend"
           @click="friendClicked(friend.id)"
         >
-          <img v-bind:src="friend.imageUrl" alt="" />
+          <img v-bind:src="getFriendImage(friend.imageUrl)" alt="" />
           <p>{{ friend.name }}</p>
         </div>
       </div>
@@ -52,6 +52,12 @@ export default {
       var date = new Date(timestamp);
       var options = { year: "numeric", month: "long", day: "numeric" };
       return date.toLocaleDateString("en-US", options);
+    },
+    getFriendImage(img){
+      if (img) {
+        return img
+      }
+      return 'https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg'
     },
     sendFriendInvite() {
       let fromUser = this.$store.state.account.user.id;
