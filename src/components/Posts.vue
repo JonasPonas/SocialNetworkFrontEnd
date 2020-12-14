@@ -1,7 +1,9 @@
 <template>
   <div id="posts">
     <addPost v-show="!isProfile"></addPost>
-
+    <div style="display: flex; justify-content: center; align-items: center; height: 95vh; " v-if="posts.length == 0">
+      <h1 style="color: white;">OMG NOTHING HERE :O</h1>
+    </div>
     <ul>
       <li class="post" v-for="(post, index) in posts" v-bind:key="post.id">
         <Post

@@ -183,6 +183,7 @@ export default {
   display: flex;
   background: #303030;
   color: white;
+  justify-content: center;
   /* border: solid 1px lightgray; */
   flex-wrap: wrap;
   margin-top: 1rem;
@@ -199,18 +200,21 @@ export default {
 }
 
 .friend {
-  width: 33%;
+  width: 7rem;
   height: 10rem;
   padding: 0.2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  /* background: #212020; */
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 0.2rem;
+  background: #212020;
 }
 
 .friend img {
-  width: 100%;
+  width: 7rem;
   height: 10rem;
   overflow: hidden;
   object-fit: cover;

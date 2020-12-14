@@ -4,7 +4,7 @@
       <p class="header">Friends</p>
       <div v-for="friend in friends" :key="friend.id">
         <div class="person" @click="toggleChat(friend)">
-          <img class="img-wrapper" :src="friend.imageUrl" alt="" />
+          <img class="img-wrapper" :src="getImage(friend.imageUrl)" alt="" />
           <p style="font-size: 20px">
             {{ friend.name + " " + friend.surname }}
           </p>
@@ -25,10 +25,15 @@ export default {
     toggleChat(friend) {
       this.$emit("showChat", friend);
     },
+    getImage(img) {
+      if (img) {
+        return img;
+      }
+      return "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
+    }
   },
 };
 </script>
-
 <style scroped>
 .wrapper-p {
   /* padding: 0.5rem; */
