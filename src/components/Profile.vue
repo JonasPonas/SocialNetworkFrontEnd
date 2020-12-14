@@ -98,8 +98,10 @@ export default {
           let f = this.friends.map((f) => {
             return f.id == toUser;
           }).length;
-          if (f == 0 && toUser != this.userId) {
+          if (f == 0 || toUser != this.userId) {
             this.showFriendInvite = true;
+          } else {
+            alert('hmmm')
           }
         })
         .catch((e) => {
