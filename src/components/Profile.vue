@@ -142,8 +142,9 @@ export default {
   background: #212020;
   position: fixed;
   top: 3rem;
+  bottom: 0;
   width: 28%;
-  height: 100%;
+  /* height: 100%; */
   padding: 0 1rem;
   /* margin-left: 1%; */
   overflow: auto;
@@ -152,7 +153,7 @@ export default {
   /* height: calc(100% - 6rem); */
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none;
-  padding-bottom: 1rem;
+  /* padding-bottom: 3rem; */
   /* bottom: 1rem; */
 }
 
@@ -169,7 +170,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   padding: 0.6rem 0;
-  height: 50%;
+  /* height: 50%; */
 }
 
 #friends {
@@ -179,7 +180,8 @@ export default {
   /* border: solid 1px lightgray; */
   flex-wrap: wrap;
   margin-top: 1rem;
-  height: 50%;
+  /* height: 50%; */
+  /* overflow: scroll; */
   /* padding: 0.2rem 0; */
 }
 
