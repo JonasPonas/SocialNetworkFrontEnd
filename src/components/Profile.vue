@@ -76,7 +76,6 @@ export default {
         .then((response) => {
           this.user = response.data[0];
           if (this.user.imageURL == undefined) {
-            console.log("--->", this.userId);
             this.user.imageURL =
               "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
           }
@@ -94,13 +93,17 @@ export default {
         })
         .then((response) => {
           this.friends = response.data;
-          let toUser = this.$store.state.account.user.id;
+          let myId = this.$store.state.account.user.id;
+          
           let f = this.friends.map((f) => {
-            return f.id == toUser;
-          }).length;
-          if (f == 0 || toUser != this.userId) {
+            return f.id;
+          });
+          console.log(myId, f);
+          if (!f.includes(myId) && myId != this.userId) {
             this.showFriendInvite = true;
-          } 
+          } else {
+            this.showFriendInvite = false;
+          }
         })
         .catch((e) => {
           console.log(e);
