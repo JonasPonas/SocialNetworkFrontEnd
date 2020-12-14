@@ -100,9 +100,7 @@ export default {
           }).length;
           if (f == 0 || toUser != this.userId) {
             this.showFriendInvite = true;
-          } else {
-            alert('hmmm')
-          }
+          } 
         })
         .catch((e) => {
           console.log(e);
