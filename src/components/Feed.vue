@@ -36,48 +36,46 @@ export default {
       friend: {},
       showingChatWindow: false,
       socket: io(ipAddress),
+      user: {},
     };
   },
   methods: {
     showChat(friend) {
       this.showingChatWindow = true;
-
       this.friend = friend;
     },
     closeChat() {
       this.showingChatWindow = false;
     },
     fetchFriends() {
-      const user = this.$store.state.account.user;
+      if (this.$store) {
+        this.user = this.$store.state.account.user;
+      }
       axios
         .get(ipAddress + "/getFriends", {
           params: {
-            id: user.id,
+            id: this.user.id,
           },
         })
         .then((response) => {
           this.friends = response.data;
         })
-        .catch((e) => {
-          console.log(e);
-        });
+        .catch(() => {});
     },
   },
   mounted() {
-    this.socket.on("connect", function () {
-      console.log("connected");
-    });
+    if (this.$store) {
+      this.socket.on("connect", function () {});
+    }
     this.fetchFriends();
-    // const userId = this.$store.state.account.user.id;
-    // this.socket.emit("register", {
-    //   userId: userId,
-    // });
   },
   created() {
-    const userId = this.$store.state.account.user.id;
-    this.socket.emit("register", {
-      userId: userId,
-    });
+    if (this.$store) {
+      const userId = this.$store.state.account.user.id;
+      this.socket.emit("register", {
+        userId: userId,
+      });
+    }
   },
 };
 </script>

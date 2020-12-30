@@ -31,6 +31,7 @@ import axios from "axios";
 import { ipAddress } from '../modules/Constants'
 
 export default {
+  name: "Add-Post",
   data: function () {
     return {
       user: Object,
@@ -40,7 +41,6 @@ export default {
   },
   methods: {
     addPost: function () {
-      const user = this.$store.state.account.user;
       var url = this.postInput;
       const description = this.postTextArea;
       if (url.includes("http://") || url.includes("https://")) {
@@ -52,7 +52,7 @@ export default {
         axios
           .post(ipAddress + `/addPost`, {
             description: description,
-            userId: user.id,
+            userId: this.user.id,
             imageURL: url,
           })
           .then(() => {
@@ -61,13 +61,17 @@ export default {
           })
           .catch((e) => {
             this.signinError = e.response.data;
-            console.log(e.response.data);
             this.errors.push(e);
           });
-        console.log(url + " " + description);
       }
     },
   },
+  created() {
+    if (this.$store) {
+        this.user = this.$store.state.account.user;
+    }
+      
+  }
 };
 </script>
 

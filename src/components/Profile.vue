@@ -158,9 +158,7 @@ export default {
   /* overflow: scroll; */
   /* height: calc(100% - 6rem); */
   -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none;
-  /* padding-bottom: 3rem; */
-  /* bottom: 1rem; */
+  scrollbar-width: none;  
 }
 
 #left-column::-webkit-scrollbar {
@@ -168,7 +166,7 @@ export default {
 }
 
 #user-info {
-  /* margin-top: 4rem; */
+  margin-top: 1rem;
   background: #303030;
   color: white;
   align-items: center;
@@ -187,6 +185,7 @@ export default {
   /* border: solid 1px lightgray; */
   flex-wrap: wrap;
   margin-top: 1rem;
+  margin-bottom: 1rem;
   /* height: 50%; */
   /* overflow: scroll; */
   /* padding: 0.2rem 0; */

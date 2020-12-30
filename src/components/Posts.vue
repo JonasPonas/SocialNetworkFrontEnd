@@ -1,8 +1,16 @@
 <template>
   <div id="posts">
     <addPost v-show="!isProfile"></addPost>
-    <div style="display: flex; justify-content: center; align-items: center; height: 95vh; " v-if="posts.length == 0">
-      <h1 style="color: white;">OMG NOTHING HERE :O</h1>
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 95vh;
+      "
+      v-if="posts.length == 0"
+    >
+      <h1 style="color: white">OMG NOTHING HERE :O</h1>
     </div>
     <ul>
       <li class="post" v-for="(post, index) in posts" v-bind:key="post.id">
@@ -45,7 +53,6 @@ export default {
     },
   },
   methods: {
-    
     postDeleted(p) {
       this.posts = this.posts.filter((post) => {
         return post.contentId !== p.contentId;
@@ -62,9 +69,10 @@ export default {
       }
     },
     fetchPosts: function () {
-      this.isProfile = this.$route.query.profile;
-      this.userId = this.$route.query.userId;
-
+      if (this.$route) {
+        this.isProfile = this.$route.query.profile;
+        this.userId = this.$route.query.userId;
+      }
       var url = ipAddress + "/getPostsByUser";
       if (!this.isProfile || this.isProfile == undefined) {
         url = ipAddress + "/getFriendsPosts";
@@ -96,7 +104,6 @@ export default {
           this.figureIfItsUsersProfile();
         })
         .catch((e) => {
-          console.log(e);
           this.errors.push(e);
         });
     },
@@ -107,6 +114,6 @@ export default {
 };
 </script>
 
-<style >
+<style scoped>
 @import "../assets/styles/Posts.css";
 </style>

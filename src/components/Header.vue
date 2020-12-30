@@ -2,7 +2,7 @@
   <header>
     <div id="nav">
       <div class="profile-wrapper">
-        <button @click="onClickTab(true)">
+        <button v-if="this.$store" @click="onClickTab(true)">
           {{
             this.$store.state.account.user.name +
             " " +
@@ -75,6 +75,8 @@ export default {
     return {
       dropdownVisible: false,
       friendInvites: [],
+      toUser: -1,
+      id: -1,
     };
   },
   methods: {
@@ -83,39 +85,42 @@ export default {
     },
     acceptInvite(invite) {
       console.log(invite);
-      let toUser = this.$store.state.account.user.id;
-      axios.post(ipAddress + '/acceptFriendInvite', {
+      axios
+        .post(ipAddress + "/acceptFriendInvite", {
           fromUser: invite.id,
-          toUser: toUser
-      }).then(() => {
-        this.getFriendInvites()
-      }).catch(e => {
-        console.log(e);
-      })
+          toUser: this.toUser,
+        })
+        .then(() => {
+          this.getFriendInvites();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     rejectInvite(invite) {
-      let toUser = this.$store.state.account.user.id;
-      axios.post(ipAddress + '/rejectFriendInvite', {
+      axios
+        .post(ipAddress + "/rejectFriendInvite", {
           fromUser: invite.id,
-          toUser: toUser
-      }).then(() => {
-        this.getFriendInvites()
-      }).catch(e => {
-        console.log(e);
-      })
+          toUser: this.toUser,
+        })
+        .then(() => {
+          this.getFriendInvites();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     getFriendInvites() {
-      let id = this.$store.state.account.user.id;
       axios
         .get(ipAddress + "/getFriendInvites", {
           params: {
-            id: id,
+            id: this.id,
           },
         })
         .then((response) => {
-          console.log(response.data);
           this.friendInvites = response.data;
-        });
+        })
+        .catch(() => {});
     },
     getInviteImage(invite) {
       if (invite.imageUrl) {
@@ -124,6 +129,9 @@ export default {
       return "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
     },
     getProfileImage: function () {
+      if (!this.$store) {
+        return "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
+      }
       const imageUrl = this.$store.state.account.user.imageURL;
       if (imageUrl == null) {
         return "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
@@ -131,6 +139,7 @@ export default {
       return imageUrl;
     },
     onClickTab: function (value) {
+      if (!this.$store) { return }
       const user = this.$store.state.account.user;
       if (value) {
         this.$router
@@ -142,6 +151,10 @@ export default {
     },
   },
   created() {
+    if (this.$store) {
+      this.toUser = this.$store.state.account.user.id;
+      this.id = this.$store.state.account.user.id;
+    }
     this.getFriendInvites();
   },
 };

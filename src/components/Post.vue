@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div v-if="post">
     <span
+      
       class="poster-info"
       @mouseover="post.posterImageHover = true"
       @mouseleave="post.posterImageHover = false"
@@ -98,20 +99,23 @@ export default {
       errors: [],
       showingComments: false,
       comments: [],
+      fromUser: {}
     };
   },
   methods: {
     addComment(comment) {
-        const fromUser = this.$store.state.account.user.id;
-        axios.post( ipAddress+ "/addComment",{
-            postId: this.post.postId,
-            text: comment,
-            fromUser: fromUser
-        }).then(() => {
-            this.showComments(true)
-        }).catch(e => {
-            console.log(e);
+      axios
+        .post(ipAddress + "/addComment", {
+          postId: this.post.postId,
+          text: comment,
+          fromUser: this.fromUser,
         })
+        .then(() => {
+          this.showComments(true);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     deletePost: function (post) {
       const contentId = post.contentId;
@@ -125,14 +129,18 @@ export default {
           this.$emit("postDeleted", this.post);
         })
         .catch((e) => {
-          console.log(e);
           this.errors.push(e);
         });
     },
     editPost: function (post) {
-      post.isEditing = !post.isEditing;
+      if (post) {
+          post.isEditing = !post.isEditing;
+      }
     },
     saveEdit: function () {
+      if (!this.post) {
+        return
+      }
       const newDescription = this.$refs["textArea-" + this.index].value;
       this.post.description = newDescription;
       this.post.isEditing = false;
@@ -170,7 +178,17 @@ export default {
         })
         .then((response) => {
           this.comments = response.data;
-        });
+        }).catch(() => {}) ;
+    },
+  },
+  created() {
+    if (this.$store) {
+      this.fromUser = this.$store.state.account.user.id;    
+    }
+  },
+  watch: {
+    post: function () {
+      this.showingComments = false;
     },
   },
 };
