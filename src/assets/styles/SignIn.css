@@ -59,8 +59,8 @@ button:focus {
     box-shadow: none;
 }
 
-#login-register-wrapper {
-    width: 99%;
+.login-register-wrapper {
+    min-width: 99%;
 }
 
 /* #2600C9 */

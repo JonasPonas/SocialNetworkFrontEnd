@@ -28,7 +28,7 @@
 
 <script>
 import axios from "axios";
-import { ipAddress } from '../modules/Constants'
+import { ipAddress } from "../modules/Constants";
 
 export default {
   name: "Add-Post",
@@ -37,10 +37,11 @@ export default {
       user: Object,
       postInput: "",
       postTextArea: "",
+      errors: [],
     };
   },
   methods: {
-    addPost: function () {
+    async addPost () {
       var url = this.postInput;
       const description = this.postTextArea;
       if (url.includes("http://") || url.includes("https://")) {
@@ -49,29 +50,30 @@ export default {
         url = "";
       }
       if (url !== "" || description !== "") {
-        axios
-          .post(ipAddress + `/addPost`, {
-            description: description,
-            userId: this.user.id,
-            imageURL: url,
-          })
-          .then(() => {
-            this.postInput = "";
-            this.postTextArea = "";
-          })
-          .catch((e) => {
-            this.signinError = e.response.data;
-            this.errors.push(e);
-          });
+        await this.add(description, url).catch((e) => {
+          this.signinError = e.response.data;
+          this.errors.push(e);
+        });
+        this.postInput = "";
+        this.postTextArea = "";
+      } else {
+        this.errors.push('failed to post')
       }
+    },
+    async add(description, url) {
+      let response = await axios.post(ipAddress + `/addPost`, {
+        description: description,
+        userId: this.user.id,
+        imageURL: url,
+      });
+      return response;
     },
   },
   created() {
     if (this.$store) {
-        this.user = this.$store.state.account.user;
+      this.user = this.$store.state.account.user;
     }
-      
-  }
+  },
 };
 </script>
 

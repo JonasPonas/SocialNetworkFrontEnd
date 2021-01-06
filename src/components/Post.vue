@@ -1,7 +1,6 @@
 <template>
   <div v-if="post">
     <span
-      
       class="poster-info"
       @mouseover="post.posterImageHover = true"
       @mouseleave="post.posterImageHover = false"
@@ -99,23 +98,17 @@ export default {
       errors: [],
       showingComments: false,
       comments: [],
-      fromUser: {}
+      fromUser: {},
     };
   },
   methods: {
-    addComment(comment) {
-      axios
-        .post(ipAddress + "/addComment", {
-          postId: this.post.postId,
-          text: comment,
-          fromUser: this.fromUser,
-        })
-        .then(() => {
-          this.showComments(true);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+    async addComment(comment) {
+      await axios.post(ipAddress + "/addComment", {
+        postId: this.post.postId,
+        text: comment,
+        fromUser: this.fromUser,
+      });
+      this.showComments(true);
     },
     deletePost: function (post) {
       const contentId = post.contentId;
@@ -134,12 +127,12 @@ export default {
     },
     editPost: function (post) {
       if (post) {
-          post.isEditing = !post.isEditing;
+        post.isEditing = !post.isEditing;
       }
     },
     saveEdit: function () {
       if (!this.post) {
-        return
+        return;
       }
       const newDescription = this.$refs["textArea-" + this.index].value;
       this.post.description = newDescription;
@@ -157,7 +150,8 @@ export default {
     },
 
     dateToTimeAgo: function (post) {
-      return TimeAgo.dateToTimeAgo(post);
+
+      return TimeAgo.dateToTimeAgo(post.date, new Date());
     },
     goToUsersProfile: function (post) {
       this.$router
@@ -167,23 +161,26 @@ export default {
         })
         .catch(() => {});
     },
-    showComments(showing) {
+    async showComments(showing) {
       this.showingComments = showing;
       if (!this.showingComments) return;
-      axios
-        .get(ipAddress + "/getComments", {
+      try {
+        let response = await axios.get(ipAddress + "/getComments", {
           params: {
             postId: this.post.postId,
           },
-        })
-        .then((response) => {
-          this.comments = response.data;
-        }).catch(() => {}) ;
+        });
+        this.comments = response.data;
+        return response
+      } catch(e) {
+        this.errors.push(e)
+        return e
+      }
     },
   },
   created() {
     if (this.$store) {
-      this.fromUser = this.$store.state.account.user.id;    
+      this.fromUser = this.$store.state.account.user.id;
     }
   },
   watch: {

@@ -9,9 +9,22 @@ var mock = new MockAdapter(axios);
 
 describe('Header.vue Test', () => {
     const wrapper = shallowMount(Header, {
-        propsData: {
-            title: 'Vue Project'
-        }
+        data: function () {
+            return {
+                id: 3
+            }
+        },
+        mocks: {
+            $store: {
+                state: {
+                    account: {
+                        user: {
+                            id: 3
+                        }
+                    }
+                }
+            }
+        },
     })
     afterAll(() => {
         mock.restore();
@@ -19,11 +32,11 @@ describe('Header.vue Test', () => {
     beforeEach(() => {
         mock.reset();
     });
-    it('Test accept invite', async () => {
+    it('Test get friend invites', async () => {
         mock.onGet("http://localhost:5004/getFriendInvites", {
             params: {
                 id: 3,
-              },
+            },
         }).reply(200,
             [{
                 name: 'Boratas',
@@ -33,20 +46,22 @@ describe('Header.vue Test', () => {
                 profileImage: null,
             }]
         );
-        axios
-            .get("http://localhost:5004/getFriendInvites", {
-                params: {
-                    id: 3,
-                }
-            })
-            .then( () => {
-                expect(wrapper.vm.friendInvites.length).toBe(1)
-            }).catch(() => {
-                // console.log(e);
-            });
-        
+
+        await wrapper.vm.getFriendInvites()
+        expect(wrapper.vm.friendInvites.length).toBe(1)
     })
     it('Get profile image', () => {
         expect(wrapper.vm.getProfileImage()).toBe("https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg")
+    })
+    it('Get invite image', () => {
+        wrapper.setData({friendInvites: [{
+            name: 'Boratas',
+            surname: 'Liaupsas',
+            userId: 5,
+            postId: 600,
+            profileImage: undefined,
+        }]})
+        const invite = wrapper.vm.friendInvites[0]
+        expect(wrapper.vm.getInviteImage(invite)).toBe("https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg")
     })
 })

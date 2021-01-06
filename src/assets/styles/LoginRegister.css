@@ -1,10 +1,10 @@
-#inputs-container {
+.inputs-container {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
 
-#inputs-container input {
+.inputs-container input {
     margin: 0.2rem 0;
     padding: 5px;
     width: 100%;

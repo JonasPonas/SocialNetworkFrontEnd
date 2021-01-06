@@ -8,30 +8,31 @@ var MockAdapter = require("axios-mock-adapter");
 var mock = new MockAdapter(axios);
 
 describe('Posts.vue Test', () => {
-    const wrapper = shallowMount(Posts, {
-        propsData: {
-            title: 'Vue Project'
-        }
-    })
+    var wrapper = null
     afterAll(() => {
         mock.restore();
     });
     beforeEach(() => {
+        wrapper = shallowMount(Posts, {
+            propsData: {
+                title: 'Vue Project'
+            },
+            data: function () {
+                return {
+                    userId: 6
+                }
+            }
+        })
         mock.reset();
     });
     it('Test fetch friends posts', async () => {
         wrapper.setData({
-            user: {
-                id: 3
-            }
-        })
-        wrapper.setData({
-            postInput: 'Labas!'
+
         })
         // wrapper.vm.addPost(); // calling component method
         mock.onGet("http://localhost:5004/getFriendsPosts", {
             params: {
-                id: 3,
+                id: 6,
             }
         }).reply(200,
             [{
@@ -45,35 +46,32 @@ describe('Posts.vue Test', () => {
                 imageUrl: null
             }]
         );
-        axios
-            .get("http://localhost:5004/getFriendsPosts", {
-                params: {
-                    id: 3,
-                }
-            })
-            .then( () => {
-                // console.log(response.data);
-                expect(wrapper.vm.posts.length).toBe(1)
-            }).catch(() => {
-                // console.log(e);
-            });
-        
-    })
-
-    it('Test delete post', async () => {
-        let posts = [
-            {
-                contentId: 1
-            }, {
-                contentId: 2
-            }
-        ]
-        wrapper.setData({
-            posts: posts
-        })
-        wrapper.vm.postDeleted({contentId: 1})
+        await wrapper.vm.fetchPosts()
         expect(wrapper.vm.posts.length).toBe(1)
     })
 
+    it('Test delete post', async () => {
+        let posts = [{
+            contentId: 1
+        }, {
+            contentId: 2
+        }]
+        wrapper.setData({
+            posts: posts
+        })
+        wrapper.vm.postDeleted({
+            contentId: 1
+        })
+        expect(wrapper.vm.posts.length).toBe(1)
+    })
+
+    it('Test omg nothing here :O', async () => {
+        let posts = []
+        wrapper.setData({
+            posts: posts
+        })
+        const h1 = wrapper.find('h1')
+        expect(h1.text()).toBe('OMG NOTHING HERE :O')
+    })
 
 })

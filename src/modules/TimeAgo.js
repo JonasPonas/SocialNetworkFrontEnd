@@ -1,7 +1,7 @@
 export const TimeAgo = {
-  dateToTimeAgo: function (post) {
-    const postDate = new Date(post.date);
-    const currDate = new Date();
+  dateToTimeAgo: function (dateString, currDate) {
+    const postDate = new Date(dateString);
+    
     var milisecondsAgo = currDate.getTime() - postDate.getTime();
     var secondsAgo = milisecondsAgo / 1000;
     var minutesAgo = secondsAgo / 60;

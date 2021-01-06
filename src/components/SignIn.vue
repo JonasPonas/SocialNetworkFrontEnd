@@ -24,10 +24,10 @@
       >
         {{ signinError }}
       </p>
-      <div id="login-register-wrapper" v-if="isShowingLogin">
+      <div class="login-register-wrapper" v-if="isShowingLogin">
         <login ref="login"></login>
       </div>
-      <div id="login-register-wrapper" v-else>
+      <div class="login-register-wrapper" v-else>
         <register ref="register" id="registracija"></register>
       </div>
       <button id="signin-button" @click="signin">
@@ -65,7 +65,6 @@ export default {
     if (this.$store) {
       this.$store.commit("login", null);
     }
-    
     axios.defaults.withCredentials = true;
   },
   methods: {

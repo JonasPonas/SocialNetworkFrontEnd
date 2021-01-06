@@ -68,7 +68,7 @@ export default {
         }
       }
     },
-    fetchPosts: function () {
+    async fetchPosts() {
       if (this.$route) {
         this.isProfile = this.$route.query.profile;
         this.userId = this.$route.query.userId;
@@ -80,8 +80,8 @@ export default {
       if (this.userId === undefined) {
         this.userId = this.$store.state.account.user.id;
       }
-      axios
-        .get(
+      try {
+        let response = await axios.get(
           url,
           {
             params: {
@@ -89,23 +89,21 @@ export default {
             },
           },
           { withCredentials: true }
-        )
-        .then((response) => {
-          response.data.forEach(function (post) {
-            post["posterImageHover"] = false;
-            post["nameHover"] = false;
-            post["isEditing"] = false;
-            if (post.profileImage == null) {
-              post.profileImage =
-                "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
-            }
-          });
-          this.posts = response.data;
-          this.figureIfItsUsersProfile();
-        })
-        .catch((e) => {
-          this.errors.push(e);
+        );
+        response.data.forEach(function (post) {
+          post["posterImageHover"] = false;
+          post["nameHover"] = false;
+          post["isEditing"] = false;
+          if (post.profileImage == null) {
+            post.profileImage =
+              "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
+          }
         });
+        this.posts = response.data;
+        this.figureIfItsUsersProfile();
+      } catch (e) {
+        this.errors.push(e);
+      }
     },
   },
   created() {

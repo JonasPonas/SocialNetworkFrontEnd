@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "test:coverage": "vue-cli-service test:unit --coverage"
   },
   "dependencies": {
     "axios": "^0.20.0",
@@ -30,6 +31,7 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/test-utils": "^1.1.2",
     "babel-eslint": "^10.1.0",
+    "babel-plugin-istanbul": "^6.0.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "jest": "^26.6.3",
@@ -75,6 +77,7 @@
     "transform": {
       ".*\\.(vue)$": "vue-jest"
     },
-    "preset": "@vue/cli-plugin-unit-jest"
+    "preset": "@vue/cli-plugin-unit-jest",
+    "test:coverage": "vue-cli-service test:unit --coverage"
   }
 }

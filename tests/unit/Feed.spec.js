@@ -1,18 +1,14 @@
 import {
-    shallowMount
+    mount
 } from '@vue/test-utils'
 import Feed from '@/components/Feed.vue'
-var axios = require("axios");
-var MockAdapter = require("axios-mock-adapter");
+const axios = require("axios");
+const MockAdapter = require("axios-mock-adapter");
 
-var mock = new MockAdapter(axios);
+const mock = new MockAdapter(axios);
 
 describe('Feed.vue Test', () => {
-    const wrapper = shallowMount(Feed, {
-        propsData: {
-            title: 'Vue Project'
-        }
-    })
+
     afterAll(() => {
         mock.restore();
     });
@@ -33,19 +29,24 @@ describe('Feed.vue Test', () => {
                 profileImage: null,
             }]
         );
-        axios
-            .get("http://localhost:5004/getFriends", {
-                params: {
-                    id: 3,
+        const wrapper = mount(Feed, {
+            propsData: {
+                title: 'Vue Project'
+            },
+            mocks: {
+                $store: {
+                    state: {
+                        account: {
+                            user: {
+                                id: 3
+                            }
+                        }
+                    }
                 }
-            })
-            .then( () => {
-                // console.log(response.data);
-                expect(wrapper.vm.friends.length).toBe(1)
-            }).catch(() => {
-                // console.log(e);
-            });
-        
+            },
+        })
+        await wrapper.vm.fetchFriends()
+        expect(wrapper.vm.friends.length).toBe(1)
     })
-    
+
 })

@@ -35,6 +35,7 @@ export default {
     return {
       messages: [],
       message: "",
+      errors: []
     };
   },
   methods: {
@@ -93,7 +94,9 @@ export default {
         })
         .then((response) => {
           this.messages = response.data;
-        });
+        }).catch(e => {
+          this.errors.push(e)
+        }) ;
     },
     scroll() {
       document.getElementById("messages").scrollTop = document.getElementById(
@@ -105,12 +108,13 @@ export default {
     this.scroll();
   },
   created() {
-    this.socket.on("messageReceived", (data) => {
-      console.log(data);
-      if (data.fromUser == this.friend.id) {
-        this.messages.push(data);
-      }
-    });
+    if (this.socket) {
+      this.socket.on("messageReceived", (data) => {
+        if (data.fromUser == this.friend.id) {
+          this.messages.push(data);
+        }
+      });
+    }
     this.fetchMessages();
   },
   watch: {

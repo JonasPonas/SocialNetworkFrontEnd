@@ -47,27 +47,25 @@ export default {
     closeChat() {
       this.showingChatWindow = false;
     },
-    fetchFriends() {
-      if (this.$store) {
-        this.user = this.$store.state.account.user;
-      }
-      axios
-        .get(ipAddress + "/getFriends", {
-          params: {
-            id: this.user.id,
-          },
-        })
-        .then((response) => {
-          this.friends = response.data;
-        })
-        .catch(() => {});
+    async fetchFriends() {
+      this.user = this.$store.state.account.user;
+      let response = await axios.get(ipAddress + "/getFriends", {
+        params: {
+          id: this.user.id,
+        },
+      });
+      return response
     },
   },
   mounted() {
     if (this.$store) {
       this.socket.on("connect", function () {});
     }
-    this.fetchFriends();
+    this.fetchFriends().then(response => {
+      this.friends = response.data;
+    }).catch(e => {
+      console.log(e);
+    });
   },
   created() {
     if (this.$store) {

@@ -1,5 +1,5 @@
 <template>
-    <form id="inputs-container">
+    <form class="inputs-container">
         <input type="text" ref="name" placeholder="Name:" autocomplete="true">
         <input type="text" ref="surname" placeholder="Surname:" autocomplete="true">
         <input type="text" ref="email" id="emailas" placeholder="Email:" autocomplete="true">

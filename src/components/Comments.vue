@@ -28,8 +28,6 @@ export default {
   },
   data() {
     return {
-      // comments: []
-
       comment: "",
     };
   },

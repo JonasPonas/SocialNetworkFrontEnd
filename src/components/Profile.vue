@@ -1,4 +1,4 @@
-// :isProfile="isProfile"
+
 <template>
   <div>
     <div id="left-column">
@@ -7,7 +7,11 @@
         <p id="name">{{ user.name + " " + user.surname }}</p>
         <p v-if="user.city != null">{{ user.city + ", " + user.country }}</p>
         <p>Birthday: {{ formatDate(user.dateOfBirth) }}</p>
-        <button class="btn btn-primary" v-if="showFriendInvite" @click="sendFriendInvite">
+        <button
+          class="btn btn-primary"
+          v-if="showFriendInvite"
+          @click="sendFriendInvite"
+        >
           Send Friend Invite
         </button>
       </div>
@@ -43,7 +47,9 @@ export default {
       user: {},
       friends: [],
       userId: "",
+      myId: -1,
       showFriendInvite: false,
+      errors: []
     };
   },
   methods: {
@@ -53,67 +59,52 @@ export default {
       var options = { year: "numeric", month: "long", day: "numeric" };
       return date.toLocaleDateString("en-US", options);
     },
-    getFriendImage(img){
+    getFriendImage(img) {
       if (img) {
-        return img
+        return img;
       }
-      return 'https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg'
+      return "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
     },
     sendFriendInvite() {
-      let fromUser = this.$store.state.account.user.id;
-
-      axios.post(ipAddress + '/sendFriendInvite', {
-        fromUser: fromUser,
-        toUser: this.userId
-      }).then(() => {
-        alert('friend invite sent!')
-      }).catch((e) => {
-        console.log(e);
-        alert('could not send friend invite');
-      })
-    },
-    getUserInfo() {
       axios
-        .get(ipAddress + "/userInfo", {
-          params: {
-            userId: this.userId,
-          },
+        .post(ipAddress + "/sendFriendInvite", {
+          fromUser: this.myId,
+          toUser: this.userId,
         })
-        .then((response) => {
-          this.user = response.data[0];
-          if (this.user.imageURL == undefined) {
-            this.user.imageURL =
-              "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
-          }
+        .then(() => {
+          alert("friend invite sent!");
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          alert("could not send friend invite");
         });
     },
-    getFriends() {
-      axios
-        .get(ipAddress + "/getFriends", {
-          params: {
-            id: this.userId,
-          },
-        })
-        .then((response) => {
-          this.friends = response.data;
-          let myId = this.$store.state.account.user.id;
-          
-          let f = this.friends.map((f) => {
-            return f.id;
-          });
-          console.log(myId, f);
-          if (!f.includes(myId) && myId != this.userId) {
-            this.showFriendInvite = true;
-          } else {
-            this.showFriendInvite = false;
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+    async getUserInfo() {
+      let response = await axios.get(ipAddress + "/userInfo", {
+        params: {
+          userId: this.userId,
+        },
+      });
+      this.user = response.data[0];
+      if (this.user.imageURL == undefined) {
+        this.user.imageURL =
+          "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
+      }
+    },
+    async getFriends() {
+      let response = await axios.get(ipAddress + "/getFriends", {
+        params: {
+          id: this.userId,
+        },
+      });
+      this.friends = response.data;
+      let f = this.friends.map((f) => {
+        return f.id;
+      });
+      if (!f.includes(this.myId) && this.myId != this.userId) {
+        this.showFriendInvite = true;
+      } else {
+        this.showFriendInvite = false;
+      }
     },
     friendClicked(friendId) {
       this.$router
@@ -124,9 +115,16 @@ export default {
         .catch(() => {});
     },
     init() {
-      this.userId = this.$route.query.userId;
-      this.getFriends();
-      this.getUserInfo();
+      if (this.$route) {
+        this.userId = this.$route.query.userId;
+        this.myId = this.$store.state.account.user.id;
+      }
+      this.getFriends().catch((e) => {
+        this.errors.push(e)
+      });
+      this.getUserInfo().catch((e) => {
+        this.errors.push(e)
+      });
     },
   },
   created() {
@@ -158,7 +156,7 @@ export default {
   /* overflow: scroll; */
   /* height: calc(100% - 6rem); */
   -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none;  
+  scrollbar-width: none;
 }
 
 #left-column::-webkit-scrollbar {

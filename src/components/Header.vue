@@ -77,6 +77,7 @@ export default {
       friendInvites: [],
       toUser: -1,
       id: -1,
+      errors: [],
     };
   },
   methods: {
@@ -84,7 +85,6 @@ export default {
       this.dropdownVisible = false;
     },
     acceptInvite(invite) {
-      console.log(invite);
       axios
         .post(ipAddress + "/acceptFriendInvite", {
           fromUser: invite.id,
@@ -94,7 +94,7 @@ export default {
           this.getFriendInvites();
         })
         .catch((e) => {
-          console.log(e);
+          this.errors.push(e);
         });
     },
     rejectInvite(invite) {
@@ -107,20 +107,20 @@ export default {
           this.getFriendInvites();
         })
         .catch((e) => {
-          console.log(e);
+          this.errors.push(e);
         });
     },
-    getFriendInvites() {
-      axios
-        .get(ipAddress + "/getFriendInvites", {
+    async getFriendInvites() {
+      try {
+        let response = await axios.get(ipAddress + "/getFriendInvites", {
           params: {
             id: this.id,
           },
-        })
-        .then((response) => {
-          this.friendInvites = response.data;
-        })
-        .catch(() => {});
+        });
+        this.friendInvites = response.data;
+      } catch (e) {
+        this.errors.push(e);
+      }
     },
     getInviteImage(invite) {
       if (invite.imageUrl) {
@@ -129,9 +129,6 @@ export default {
       return "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
     },
     getProfileImage: function () {
-      if (!this.$store) {
-        return "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
-      }
       const imageUrl = this.$store.state.account.user.imageURL;
       if (imageUrl == null) {
         return "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
@@ -139,7 +136,6 @@ export default {
       return imageUrl;
     },
     onClickTab: function (value) {
-      if (!this.$store) { return }
       const user = this.$store.state.account.user;
       if (value) {
         this.$router
@@ -151,10 +147,8 @@ export default {
     },
   },
   created() {
-    if (this.$store) {
-      this.toUser = this.$store.state.account.user.id;
-      this.id = this.$store.state.account.user.id;
-    }
+    this.toUser = this.$store.state.account.user.id;
+    this.id = this.$store.state.account.user.id;
     this.getFriendInvites();
   },
 };

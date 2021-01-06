@@ -36,6 +36,7 @@ export default {
       txt: "",
       dropdownVisible: false,
       users: [],
+      errors: []
     };
   },
   methods: {
@@ -46,36 +47,45 @@ export default {
           query: { profile: true, userId: userId },
         })
         .catch((e) => {
-          console.log(e);
+          this.errors.push(e)
         });
       this.dropdownVisible = false;
     },
     hideDropdown() {
       this.dropdownVisible = false;
     },
-    search: function () {
+    setImages() {
+      this.users.forEach((u) => {
+        if (u.imageUrl == null) {
+          u.imageUrl =
+            "https://static.wixstatic.com/media/142313_2fdcee04ff144161a745c651458666ac~mv2.png/v1/crop/x_14,y_0,w_299,h_326/fill/w_240,h_274,al_c,q_85,usm_0.66_1.00_0.01/no-user.webp";
+        }
+      });
+    },
+    async search() {
       if (this.txt === "") {
         this.dropdownVisible = false;
       } else {
-        axios
-          .post(ipAddress + "/searchUser", { fullName: this.txt })
-          .then((response) => {
-            this.users = response.data;
-            this.users.forEach((u) => {
-              if (u.imageUrl == null) {
-                u.imageUrl =
-                  "https://static.wixstatic.com/media/142313_2fdcee04ff144161a745c651458666ac~mv2.png/v1/crop/x_14,y_0,w_299,h_326/fill/w_240,h_274,al_c,q_85,usm_0.66_1.00_0.01/no-user.webp";
-              }
-            });
-            console.log(this.users);
-          })
-          .catch((e) => {
-            console.log(e);
+        try {
+          let response = await axios.post(ipAddress + "/searchUser", {
+            fullName: this.txt,
           });
-        this.dropdownVisible = true;
+          this.users = response.data;
+          this.setImages()
+          this.dropdownVisible = true;
+        } catch (e) {
+          this.errors.push(e)
+        }
       }
     },
   },
+  watch: {
+    users: function() {
+      if (this.users.length == 0) {
+        this.dropdownVisible = false
+      }
+    }
+  }
 };
 </script>
 <style scoped>
