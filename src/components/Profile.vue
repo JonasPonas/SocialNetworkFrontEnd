@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <div id="left-column">
+    <div class="left-column">
       <div id="user-info">
         <img v-bind:src="user.imageURL" alt="" />
         <p id="name">{{ user.name + " " + user.surname }}</p>
@@ -16,30 +16,21 @@
         </button>
       </div>
 
-      <div id="friends">
-        <p>Friends ({{ friends.length }})</p>
-        <div
-          v-for="friend in friends"
-          :key="friend.id"
-          class="friend"
-          @click="friendClicked(friend.id)"
-        >
-          <img v-bind:src="getFriendImage(friend.imageUrl)" alt="" />
-          <p>{{ friend.name }}</p>
-        </div>
-      </div>
+      <Friends :friends="friends" :title="'Friends'"/>
     </div>
     <feed></feed>
   </div>
 </template>
 <script>
 import Feed from "@/components/Feed.vue";
+import Friends from "@/components/Friends";
 import { ipAddress } from "../modules/Constants";
 import axios from "axios";
 
 export default {
   components: {
     feed: Feed,
+    Friends
   },
   name: "Profile",
   data: function () {
@@ -59,12 +50,7 @@ export default {
       var options = { year: "numeric", month: "long", day: "numeric" };
       return date.toLocaleDateString("en-US", options);
     },
-    getFriendImage(img) {
-      if (img) {
-        return img;
-      }
-      return "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
-    },
+    
     sendFriendInvite() {
       axios
         .post(ipAddress + "/sendFriendInvite", {
@@ -106,14 +92,7 @@ export default {
         this.showFriendInvite = false;
       }
     },
-    friendClicked(friendId) {
-      this.$router
-        .push({
-          name: "Profile",
-          query: { profile: true, userId: friendId },
-        })
-        .catch(() => {});
-    },
+    
     init() {
       if (this.$route) {
         this.userId = this.$route.query.userId;
@@ -142,26 +121,7 @@ export default {
 </script>
 
 <style scoped>
-#left-column {
-  background: #212020;
-  position: fixed;
-  top: 3rem;
-  bottom: 0;
-  width: 28%;
-  /* height: 100%; */
-  padding: 0 1rem;
-  /* margin-left: 1%; */
-  overflow: auto;
-  box-sizing: border-box;
-  /* overflow: scroll; */
-  /* height: calc(100% - 6rem); */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none;
-}
 
-#left-column::-webkit-scrollbar {
-  display: none;
-}
 
 #user-info {
   margin-top: 1rem;
@@ -173,53 +133,6 @@ export default {
   justify-content: center;
   padding: 0.6rem 0;
   /* height: 50%; */
-}
-
-#friends {
-  display: flex;
-  background: #303030;
-  color: white;
-  justify-content: center;
-  /* border: solid 1px lightgray; */
-  flex-wrap: wrap;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  /* height: 50%; */
-  /* overflow: scroll; */
-  /* padding: 0.2rem 0; */
-}
-
-#friends p {
-  text-align: center;
-  width: 100%;
-  font-weight: bold;
-  margin: 0.5rem;
-}
-
-.friend {
-  width: 7rem;
-  height: 10rem;
-  padding: 0.2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  border-radius: 10px;
-  overflow: hidden;
-  margin: 0.2rem;
-  background: #212020;
-}
-
-.friend img {
-  width: 7rem;
-  height: 10rem;
-  overflow: hidden;
-  object-fit: cover;
-}
-
-.friend p {
-  margin: 0.5rem;
-  font-weight: normal;
 }
 
 #user-info img {

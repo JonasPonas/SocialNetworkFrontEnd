@@ -2,6 +2,10 @@
   <div>
     <feedHeader></feedHeader>
     <posts></posts>
+    <div class="left-column" v-if="showing">
+      <Friends :friends="friendSuggestions" :title="'People you may know'"/>
+    </div>
+    
     <Chat @showChat="showChat" :friends="friends" />
     <ChatWindow
       :socket="socket"
@@ -15,6 +19,7 @@
 
 <script>
 import axios from "axios";
+import Friends from "@/components/Friends";
 import ChatWindow from "./ChatWindow";
 import Header from "./Header.vue";
 import Posts from "./Posts.vue";
@@ -29,10 +34,13 @@ export default {
     posts: Posts,
     Chat,
     ChatWindow,
+    Friends
   },
   data() {
     return {
+      showing: false,
       friends: [],
+      friendSuggestions: [],
       friend: {},
       showingChatWindow: false,
       socket: io(ipAddress),
@@ -56,6 +64,11 @@ export default {
       });
       return response
     },
+    async fetchFriendSuggestions() {
+      this.user = this.$store.state.account.user;
+      let response = await axios.get(ipAddress + "/suggestions/friends/" + this.user.id)
+      this.friendSuggestions = response.data
+    }
   },
   mounted() {
     if (this.$store) {
@@ -68,6 +81,9 @@ export default {
     });
   },
   created() {
+    this.showing = this.$route.name == "Feed" ? true : false
+    console.log(this.$route.name);
+    this.fetchFriendSuggestions();
     if (this.$store) {
       const userId = this.$store.state.account.user.id;
       this.socket.emit("register", {

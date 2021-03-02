@@ -7,7 +7,6 @@ const MockAdapter = require("axios-mock-adapter");
 const mock = new MockAdapter(axios);
 
 describe('ChatWindow.vue Test', () => {
-
     const wrapper = shallowMount(ChatWindow, {
         propsData: {
             friend: {

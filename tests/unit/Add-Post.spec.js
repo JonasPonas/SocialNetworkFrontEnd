@@ -35,7 +35,6 @@ describe('Add-Post.vue Test', () => {
     })
     await wrapper.vm.addPost()
     expect(wrapper.vm.postTextArea).toBe('')
-
   })
 
   it('Test add post without description', async () => {
