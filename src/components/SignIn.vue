@@ -25,12 +25,12 @@
         {{ signinError }}
       </p>
       <div class="login-register-wrapper" v-if="isShowingLogin">
-        <login ref="login"></login>
+        <login ref="login" @finish="signin"></login>
       </div>
       <div class="login-register-wrapper" v-else>
-        <register ref="register" id="registracija"></register>
+        <register ref="register" id="registracija" @finish="signin"></register>
       </div>
-      <button id="signin-button" @click="signin">
+      <button v-focus id="signin-button" @click="signin">
         {{ isShowingLogin ? "Login" : "Register" }}
       </button>
     </div>
@@ -47,13 +47,13 @@ export default {
   name: "SignIn",
   data: function () {
     return {
-      isShowingLogin: false,
+      isShowingLogin: true,
       signinError: "",
       errors: [],
       notificationColor: "red",
       buttonsBackgrounds: {
-        loginButton: "button",
-        registerButton: "button selected ",
+        loginButton: "button selected",
+        registerButton: "button",
       },
     };
   },
@@ -99,6 +99,9 @@ export default {
         this.signinError = "Fill in all the fields.";
         return;
       }
+      this.loginRequest(email, password);
+    },
+    loginRequest: function (email, password) {
       axios
         .post(
           ipAddress + `/login`,
@@ -157,6 +160,7 @@ export default {
               "Registration successfull. You can Login.",
               false
             );
+            this.loginRequest(email, password);
           })
           .catch((e) => {
             this.showNotification(e.response.data, true);
@@ -164,6 +168,14 @@ export default {
             this.errors.push(e);
           });
       }
+    },
+  },
+  directives: {
+    focus: {
+      // directive definition
+      inserted: function (el) {
+        el.focus();
+      },
     },
   },
 };

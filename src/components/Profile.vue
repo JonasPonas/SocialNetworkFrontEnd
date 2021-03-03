@@ -16,7 +16,7 @@
         </button>
       </div>
 
-      <Friends :friends="friends" :title="'Friends'"/>
+      <Friends :friends="friends" :title="'Friends'" />
     </div>
     <feed></feed>
   </div>
@@ -24,13 +24,13 @@
 <script>
 import Feed from "@/components/Feed.vue";
 import Friends from "@/components/Friends";
-import { ipAddress } from "../modules/Constants";
+import { ipAddress, defaultImg } from "../modules/Constants";
 import axios from "axios";
 
 export default {
   components: {
     feed: Feed,
-    Friends
+    Friends,
   },
   name: "Profile",
   data: function () {
@@ -40,7 +40,7 @@ export default {
       userId: "",
       myId: -1,
       showFriendInvite: false,
-      errors: []
+      errors: [],
     };
   },
   methods: {
@@ -50,7 +50,7 @@ export default {
       var options = { year: "numeric", month: "long", day: "numeric" };
       return date.toLocaleDateString("en-US", options);
     },
-    
+
     sendFriendInvite() {
       axios
         .post(ipAddress + "/sendFriendInvite", {
@@ -72,8 +72,7 @@ export default {
       });
       this.user = response.data[0];
       if (this.user.imageURL == undefined) {
-        this.user.imageURL =
-          "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
+        this.user.imageURL = defaultImg;
       }
     },
     async getFriends() {
@@ -92,17 +91,17 @@ export default {
         this.showFriendInvite = false;
       }
     },
-    
+
     init() {
       if (this.$route) {
         this.userId = this.$route.query.userId;
         this.myId = this.$store.state.account.user.id;
       }
       this.getFriends().catch((e) => {
-        this.errors.push(e)
+        this.errors.push(e);
       });
       this.getUserInfo().catch((e) => {
-        this.errors.push(e)
+        this.errors.push(e);
       });
     },
   },
@@ -121,8 +120,6 @@ export default {
 </script>
 
 <style scoped>
-
-
 #user-info {
   margin-top: 1rem;
   background: #303030;

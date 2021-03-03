@@ -50,6 +50,7 @@
         @addComment="addComment"
         :comments="comments"
         v-if="showingComments"
+        ref="comm"
       />
       <div class="bottom-buttons">
         <div class="edit-buttons-wrapper" v-if="post.isEditing">
@@ -82,7 +83,7 @@
 <script>
 import { TimeAgo } from "../modules/TimeAgo";
 import axios from "axios";
-import { ipAddress } from "../modules/Constants";
+import { ipAddress, defaultImg } from "../modules/Constants";
 import Comments from "./Comments.vue";
 export default {
   props: {
@@ -150,7 +151,6 @@ export default {
     },
 
     dateToTimeAgo: function (post) {
-
       return TimeAgo.dateToTimeAgo(post.date, new Date());
     },
     goToUsersProfile: function (post) {
@@ -171,10 +171,17 @@ export default {
           },
         });
         this.comments = response.data;
-        return response
-      } catch(e) {
-        this.errors.push(e)
-        return e
+        //fix comment images
+        this.comments.forEach((comment) => {
+          if (comment.imageURL == null || comment.imageURL == undefined) {
+            comment.imageURL = defaultImg;
+          }
+        });
+        //this.$refs.comm.fixCommentImg();
+        return response;
+      } catch (e) {
+        this.errors.push(e);
+        return e;
       }
     },
   },

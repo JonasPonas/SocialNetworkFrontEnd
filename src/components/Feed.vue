@@ -3,9 +3,9 @@
     <feedHeader></feedHeader>
     <posts></posts>
     <div class="left-column" v-if="showing">
-      <Friends :friends="friendSuggestions" :title="'People you may know'"/>
+      <Friends :friends="friendSuggestions" :title="'People you may know'" />
     </div>
-    
+
     <Chat @showChat="showChat" :friends="friends" />
     <ChatWindow
       :socket="socket"
@@ -34,7 +34,7 @@ export default {
     posts: Posts,
     Chat,
     ChatWindow,
-    Friends
+    Friends,
   },
   data() {
     return {
@@ -62,26 +62,34 @@ export default {
           id: this.user.id,
         },
       });
-      return response
+      return response;
     },
     async fetchFriendSuggestions() {
       this.user = this.$store.state.account.user;
-      let response = await axios.get(ipAddress + "/suggestions/friends/" + this.user.id)
-      this.friendSuggestions = response.data
-    }
+      try {
+        let response = await axios.get(
+          ipAddress + "/suggestions/friends/" + this.user.id
+        );
+        this.friendSuggestions = response.data;
+      } catch (error) {
+        console.log("No Friends To Suggest!");
+      }
+    },
   },
   mounted() {
     if (this.$store) {
       this.socket.on("connect", function () {});
     }
-    this.fetchFriends().then(response => {
-      this.friends = response.data;
-    }).catch(e => {
-      console.log(e);
-    });
+    this.fetchFriends()
+      .then((response) => {
+        this.friends = response.data;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   },
   created() {
-    this.showing = this.$route.name == "Feed" ? true : false
+    this.showing = this.$route.name == "Feed" ? true : false;
     console.log(this.$route.name);
     this.fetchFriendSuggestions();
     if (this.$store) {

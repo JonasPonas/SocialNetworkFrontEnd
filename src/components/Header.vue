@@ -10,6 +10,7 @@
           }}
         </button>
         <img v-bind:src="getProfileImage()" alt="" />
+        <button @click="onClickLogOut()">Leave</button>
       </div>
       <div id="buttons-and-input">
         <div class="half">
@@ -81,6 +82,11 @@ export default {
     };
   },
   methods: {
+    onClickLogOut() {
+      this.$router.push({ name: "SignIn" }).catch(() => {
+        console.log("Fuck");
+      });
+    },
     hide() {
       this.dropdownVisible = false;
     },

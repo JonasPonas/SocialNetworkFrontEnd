@@ -2,26 +2,40 @@
   <div class="wrapper">
     <div v-for="comment in comments" :key="comment.id" class="comment">
       <div class="user">
-        <div style="display: flex; flex-direction: column; align-items: center;">
+        <div style="display: flex; flex-direction: column; align-items: center">
           <img class="poster-image" :src="comment.imageURL" alt="" />
-          <span class="poster-name">{{
-            comment.name
-          }}</span>
+          <span class="poster-name">{{ comment.name }}</span>
         </div>
-        <p style="background: #242424; border-radius: 5px; margin-left: 1rem; margin-bottom: 1.4rem;">
+        <p
+          style="
+            background: #242424;
+            border-radius: 5px;
+            margin-left: 1rem;
+            margin-bottom: 1.4rem;
+          "
+        >
           {{ comment.text }}
         </p>
       </div>
     </div>
     <div class="input-wrapper">
       <!-- <p style="background: none" for="">Add comment</p> -->
-      <input v-model="comment" name="" id="" cols="3" rows="1" placeholder="Add comment...">
+      <input
+        v-model="comment"
+        name=""
+        id=""
+        cols="3"
+        rows="1"
+        placeholder="Add comment..."
+      />
       <button @click="addComment">Send</button>
     </div>
   </div>
 </template>
 
 <script>
+//import { defaultImg } from "../modules/Constants";
+
 export default {
   props: {
     comments: Array,
@@ -37,7 +51,9 @@ export default {
       this.comment = "";
     },
   },
-  created() {},
+  created() {
+    //this.fixCommentImg();
+  },
 };
 </script>
 
@@ -66,7 +82,6 @@ export default {
 }
 
 .poster-name {
-
   text-align: center;
 }
 .poster-image {
