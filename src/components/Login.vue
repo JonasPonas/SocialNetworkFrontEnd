@@ -1,12 +1,14 @@
 <template>
   <form class="inputs-container">
     <input
+      class="form-control"
       ref="loginName"
       type="text"
       placeholder="Email:"
       autocomplete="true"
     />
     <input
+      class="form-control"
       ref="loginPassword"
       type="password"
       placeholder="Password:"

@@ -1,24 +1,63 @@
 
 <template>
   <div>
-    <div class="left-column">
-      <div id="user-info">
-        <img v-bind:src="user.imageURL" alt="" />
-        <p id="name">{{ user.name + " " + user.surname }}</p>
-        <p v-if="user.city != null">{{ user.city + ", " + user.country }}</p>
-        <p>Birthday: {{ formatDate(user.dateOfBirth) }}</p>
-        <button
-          class="btn btn-primary"
-          v-if="showFriendInvite"
-          @click="sendFriendInvite"
-        >
-          Send Friend Invite
-        </button>
-      </div>
+    <div class="position-relative p-4">
+      <div class="left-column">
+        <div id="user-info">
+          <img
+            v-bind:src="user.imageURL"
+            alt=""
+            @click="show = true"
+            class="hover-pointer"
+          />
+          <p id="name">{{ user.name + " " + user.surname }}</p>
+          <p v-if="user.city != null">{{ user.city + ", " + user.country }}</p>
+          <p>Birthday: {{ formatDate(user.dateOfBirth) }}</p>
+          <button
+            class="btn btn-primary"
+            v-if="showFriendInvite"
+            @click="sendFriendInvite"
+          >
+            Send Friend Invite
+          </button>
+        </div>
 
-      <Friends :friends="friends" :title="'Friends'" />
+        <Friends :friends="friends" :title="'Friends'" />
+      </div>
+      <feed></feed>
+
+      <b-overlay :show="show" no-center no-wrap>
+        <template #overlay>
+          <div class="overlay-input text-center">
+            <p id="cancel-label"><b>Please provide profile picture URL</b></p>
+            <input
+              class="form-control"
+              ref="pictureUrl"
+              type="text"
+              placeholder="ImgUrl:"
+            />
+            <div class="text-right">
+              <b-button
+                ref="save"
+                variant="success"
+                size="md"
+                @click="updateProfilePicture"
+              >
+                Save
+              </b-button>
+              <b-button
+                ref="cancel"
+                variant="danger"
+                size="md"
+                @click="show = false"
+              >
+                Cancel
+              </b-button>
+            </div>
+          </div>
+        </template>
+      </b-overlay>
     </div>
-    <feed></feed>
   </div>
 </template>
 <script>
@@ -41,6 +80,7 @@ export default {
       myId: -1,
       showFriendInvite: false,
       errors: [],
+      show: false,
     };
   },
   methods: {
@@ -50,7 +90,6 @@ export default {
       var options = { year: "numeric", month: "long", day: "numeric" };
       return date.toLocaleDateString("en-US", options);
     },
-
     sendFriendInvite() {
       axios
         .post(ipAddress + "/sendFriendInvite", {
@@ -104,6 +143,25 @@ export default {
         this.errors.push(e);
       });
     },
+    updateProfilePicture() {
+      //console.log("Img url: " + this.$refs.pictureUrl.value);
+      if (this.$refs.pictureUrl.value != "") {
+        axios
+          .post(ipAddress + "/setProfilePicture", {
+            userId: this.myId,
+            imageUrl: this.$refs.pictureUrl.value,
+          })
+          .then(() => {
+            alert("Profile picture changed!");
+            this.$store.state.account.user.imageURL = this.$refs.pictureUrl.value;
+          })
+          .catch(() => {
+            alert("could not change profile picture!");
+          });
+      }
+
+      this.show = false;
+    },
   },
   created() {
     // this.user = this.$store.state.account.user;
@@ -142,5 +200,22 @@ export default {
 #user-info #name {
   margin-top: 1.5rem;
   font-weight: bold;
+}
+
+.hover-pointer {
+  cursor: pointer;
+}
+
+.overlay-input {
+  /* can also be whatever container */
+  width: 500px;
+  height: auto;
+  margin: 0 auto;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  margin-left: -250px;
+  margin-top: -250px;
+  display: block;
 }
 </style>
