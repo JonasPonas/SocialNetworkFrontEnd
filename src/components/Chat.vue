@@ -3,11 +3,16 @@
     <div class="chat-wrapper">
       <p class="header">Friends</p>
       <div v-for="friend in friends" :key="friend.id">
-        <div class="person" @click="toggleChat(friend)">
+        <div class="person" @click="openProfile(friend.id)">
           <img class="img-wrapper" :src="getImage(friend.imageUrl)" alt="" />
           <p style="font-size: 20px">
             {{ friend.name + " " + friend.surname }}
           </p>
+          <div class="ml-auto">
+            <b-button variant="success" size="md" @click="toggleChat(friend)">
+              Chat
+            </b-button>
+          </div>
         </div>
       </div>
     </div>
@@ -30,7 +35,17 @@ export default {
         return img;
       }
       return "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
-    }
+    },
+    openProfile(userId) {
+      this.$router
+        .push({
+          name: "Profile",
+          query: { profile: true, userId: userId },
+        })
+        .catch((e) => {
+          this.errors.push(e);
+        });
+    },
   },
 };
 </script>
