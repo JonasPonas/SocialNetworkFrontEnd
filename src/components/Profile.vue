@@ -97,6 +97,7 @@ export default {
           toUser: this.userId,
         })
         .then(() => {
+          this.showFriendInvite = false;
           alert("friend invite sent!");
         })
         .catch(() => {
@@ -124,7 +125,21 @@ export default {
       let f = this.friends.map((f) => {
         return f.id;
       });
-      if (!f.includes(this.myId) && this.myId != this.userId) {
+
+      let invites = await axios.get(ipAddress + "/getFriendInvites", {
+        params: {
+          id: this.userId,
+        },
+      });
+      let i = invites.data.map((i) => {
+        return i.id;
+      });
+
+      if (
+        !f.includes(this.myId) &&
+        this.myId != this.userId &&
+        !i.includes(this.myId)
+      ) {
         this.showFriendInvite = true;
       } else {
         this.showFriendInvite = false;
