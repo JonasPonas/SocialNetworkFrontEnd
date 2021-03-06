@@ -27,6 +27,10 @@ const routes = [{
         meta: {
             requiresAuth: true
         }
+    },
+    {
+        path: "*",
+        component: SignIn
     }
 ]
 
