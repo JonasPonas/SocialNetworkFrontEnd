@@ -11,9 +11,8 @@ import App from './App.vue'
 import router from './router'
 import VueSession from 'vue-session'
 
-axios.defaults.withCredentials = false
-
-// axios.create({ withCredentials: true, })
+axios.defaults.withCredentials = true
+    // axios.create({ withCredentials: true, })
 
 // const instance = axios.create({
 //   withCredentials: true,
