@@ -3,15 +3,15 @@
     <div class="chat-wrapper">
       <p class="header">Friends</p>
       <div v-for="friend in friends" :key="friend.id">
-        <div class="person" @click="openProfile(friend.id)">
+        <div class="person">
           <img class="img-wrapper" :src="getImage(friend.imageUrl)" alt="" />
-          <p style="font-size: 20px">
+          <p style="font-size: 20px" @click="openProfile(friend.id)">
             {{ friend.name + " " + friend.surname }}
           </p>
           <div class="ml-auto">
-            <b-button variant="success" size="md" @click="toggleChat(friend)">
-              Chat
-            </b-button>
+            <p class="h2 mb-2">
+              <b-icon icon="chat-dots-fill" @click="toggleChat(friend)" />
+            </p>
           </div>
         </div>
       </div>
@@ -83,7 +83,7 @@ export default {
   padding: 0 0.5rem;
   /* text-align: center; */
 }
-.person:hover {
+.person p:hover {
   cursor: pointer;
 }
 
