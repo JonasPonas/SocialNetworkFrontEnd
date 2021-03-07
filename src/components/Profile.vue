@@ -7,7 +7,7 @@
           <img
             v-bind:src="user.imageURL"
             alt=""
-            @click="show = true"
+            @click="openProfilePictureChange"
             class="hover-pointer"
           />
           <p id="name">{{ user.name + " " + user.surname }}</p>
@@ -177,6 +177,9 @@ export default {
 
       this.show = false;
     },
+    openProfilePictureChange(){
+      if(this.myId == this.userId) this.show = true;
+    }
   },
   created() {
     // this.user = this.$store.state.account.user;
