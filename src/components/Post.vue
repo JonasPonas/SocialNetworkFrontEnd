@@ -63,17 +63,23 @@
           </button>
           <!-- <span>10</span> -->
 
-          <button>
-            <img
-              @click="showComments(!showingComments)"
+          <button @click="showComments(!showingComments)">
+            <b-icon icon="chat-square-text-fill" variant="light" />
+          </button>
+          <span v-if="info['comments'] > 0" class="countNumber">{{
+            info.comments
+          }}</span>
+          <button @click="reaction(true)">
+            <b-icon
+              :icon="reaction()"
+              variant="light"
               class="reaction-button"
-              src="@/assets/comment.png"
-              alt=""
+              ref="reactI"
             />
           </button>
-          <button>
-            <img class="reaction-button" src="@/assets/heart.png" alt="" />
-          </button>
+          <span v-if="info['reactions'] > 0" class="countNumber">{{
+            info.reactions
+          }}</span>
         </div>
       </div>
     </div>
@@ -100,15 +106,22 @@ export default {
       showingComments: false,
       comments: [],
       fromUser: {},
+      reactionActive: false,
+      info: { reactions: 0, comments: 0, reacted: 0 },
     };
   },
   methods: {
     async addComment(comment) {
-      await axios.post(ipAddress + "/addComment", {
-        postId: this.post.postId,
-        text: comment,
-        fromUser: this.fromUser,
-      });
+      try {
+        await axios.post(ipAddress + "/addComment", {
+          postId: this.post.postId,
+          text: comment,
+          fromUser: this.fromUser,
+        });
+        this.info.comments++;
+      } catch {
+        console.log("Failed to add a comment!");
+      }
       this.showComments(true);
     },
     deletePost: function (post) {
@@ -184,19 +197,77 @@ export default {
         return e;
       }
     },
+    async getInfo() {
+      if (this.userId === undefined)
+        this.userId = this.$store.state.account.user.id;
+      try {
+        let info = await axios.get(
+          ipAddress + "/getPostInfo",
+          {
+            params: {
+              userId: this.userId,
+              postId: this.post.postId,
+            },
+          },
+          { withCredentials: true }
+        );
+        //console.log(info.data[0].reactions);
+        this.info["reactions"] = Number(info.data[0].reactions);
+        this.info["comments"] = Number(info.data[0].comments);
+        Number(info.data[0].reacted) == 1
+          ? (this.reactionActive = true)
+          : (this.reactionActive = false);
+        this.reaction();
+      } catch {
+        console.log("Failed to fetch post: " + this.post.postId + "(id) info");
+      }
+    },
+    reaction: function (click = false) {
+      if (click) {
+        axios
+          .post(ipAddress + `/addReaction`, {
+            userId: this.userId,
+            postId: this.post.postId,
+            emojiId: 4, // Sending heart emoji for now
+          })
+          .then(() => {
+            this.reactionActive = !this.reactionActive;
+            if (!this.reactionActive) this.info.reactions--;
+            else this.info.reactions++;
+          })
+          .catch((e) => {
+            console.log("Setting reaction failed: " + e);
+          });
+      }
+
+      if (this.reactionActive) return "heart-fill";
+      else return "heart";
+    },
+    infoUpdate() {
+      console.log("Info update!");
+    },
   },
   created() {
     if (this.$store) {
       this.fromUser = this.$store.state.account.user.id;
     }
+    this.getInfo();
   },
   watch: {
     post: function () {
       this.showingComments = false;
+      this.getInfo();
     },
   },
 };
 </script>
 
 <style>
+.countNumber {
+  position: relative;
+  left: -6px;
+  top: -6px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
 </style>

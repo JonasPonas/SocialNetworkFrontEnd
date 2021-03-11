@@ -31,7 +31,7 @@ import AddPost from "./Add-Post.vue";
 
 import Post from "./Post.vue";
 
-import { ipAddress } from "../modules/Constants";
+import { ipAddress, defaultImg } from "../modules/Constants";
 
 export default {
   components: {
@@ -90,14 +90,14 @@ export default {
           },
           { withCredentials: true }
         );
-        response.data.forEach(function (post) {
+        response.data.forEach((post) => {
           post["posterImageHover"] = false;
           post["nameHover"] = false;
           post["isEditing"] = false;
           if (post.profileImage == null) {
-            post.profileImage =
-              "https://www.literarytraveler.com/wp-content/uploads/2013/05/Vincent_van_Gogh_Self_Portrait_1887_ChicagoArtInstitute.jpg";
+            post.profileImage = defaultImg;
           }
+
         });
         this.posts = response.data;
         this.figureIfItsUsersProfile();
