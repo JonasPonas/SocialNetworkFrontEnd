@@ -1,62 +1,69 @@
 
 <template>
   <div>
-    <div class="position-relative p-4">
-      <div class="left-column">
-        <div id="user-info">
-          <img
-            v-bind:src="user.imageURL"
-            alt=""
-            @click="openProfilePictureChange"
-            class="hover-pointer"
-          />
-          <p id="name">{{ user.name + " " + user.surname }}</p>
-          <p v-if="user.city != null">{{ user.city + ", " + user.country }}</p>
-          <p>Birthday: {{ formatDate(user.dateOfBirth) }}</p>
-          <button
-            class="btn btn-primary"
-            v-if="showFriendInvite"
-            @click="sendFriendInvite"
-          >
-            Send Friend Invite
-          </button>
+    <div class="container-fluid">
+      <div class="row no-gutters">
+        <div class="col-12 col-xl-3 content-wrapper">
+          <div id="user-info">
+            <img
+              v-bind:src="user.imageURL"
+              alt=""
+              @click="openProfilePictureChange"
+              class="hover-pointer"
+            />
+            <p id="name">{{ user.name + " " + user.surname }}</p>
+            <p v-if="user.city != null">
+              {{ user.city + ", " + user.country }}
+            </p>
+            <p>Birthday: {{ formatDate(user.dateOfBirth) }}</p>
+            <button
+              class="btn btn-primary"
+              v-if="showFriendInvite"
+              @click="sendFriendInvite"
+            >
+              Send Friend Invite
+            </button>
+          </div>
+
+          <Friends :friends="friends" :title="'Friends'" />
         </div>
 
-        <Friends :friends="friends" :title="'Friends'" />
-      </div>
-      <feed></feed>
+        <div class="col-12 col-xl-9">
+          <feed></feed>
+        </div>
 
-      <b-overlay :show="show" no-center no-wrap>
-        <template #overlay>
-          <div class="overlay-input text-center">
-            <p id="cancel-label"><b>Please provide profile picture URL</b></p>
-            <input
-              class="form-control"
-              ref="pictureUrl"
-              type="text"
-              placeholder="ImgUrl:"
-            />
-            <div class="text-right">
-              <b-button
-                ref="save"
-                variant="success"
-                size="md"
-                @click="updateProfilePicture"
-              >
-                Save
-              </b-button>
-              <b-button
-                ref="cancel"
-                variant="danger"
-                size="md"
-                @click="show = false"
-              >
-                Cancel
-              </b-button>
+        <b-overlay :show="show" no-center no-wrap>
+          <template #overlay>
+            <div class="overlay-input text-center">
+              <p id="cancel-label"><b>Please provide profile picture URL</b></p>
+              <input
+                class="form-control"
+                ref="pictureUrl"
+                type="text"
+                placeholder="ImgUrl:"
+              />
+              <div class="text-right">
+                <b-button
+                  ref="save"
+                  variant="success"
+                  size="md"
+                  @click="updateProfilePicture"
+                >
+                  Save
+                </b-button>
+                <b-button
+                  ref="cancel"
+                  variant="danger"
+                  size="md"
+                  @click="show = false"
+                >
+                  Cancel
+                </b-button>
+              </div>
             </div>
-          </div>
-        </template>
-      </b-overlay>
+          </template>
+        </b-overlay>
+      </div>
     </div>
   </div>
 </template>
@@ -177,9 +184,9 @@ export default {
 
       this.show = false;
     },
-    openProfilePictureChange(){
-      if(this.myId == this.userId) this.show = true;
-    }
+    openProfilePictureChange() {
+      if (this.myId == this.userId) this.show = true;
+    },
   },
   created() {
     // this.user = this.$store.state.account.user;
@@ -236,4 +243,5 @@ export default {
   margin-top: -250px;
   display: block;
 }
+@import "../assets/styles/Main.css";
 </style>

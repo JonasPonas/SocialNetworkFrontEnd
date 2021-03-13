@@ -1,5 +1,5 @@
 <template>
-  <div id="posts">
+  <div>
     <addPost v-show="!isProfile"></addPost>
     <div
       style="
@@ -12,7 +12,7 @@
     >
       <h1 style="color: white">OMG NOTHING HERE :O</h1>
     </div>
-    <ul>
+    <ul class="pl-0">
       <li class="post" v-for="(post, index) in posts" v-bind:key="post.id">
         <Post
           @postDeleted="postDeleted"
@@ -97,7 +97,6 @@ export default {
           if (post.profileImage == null) {
             post.profileImage = defaultImg;
           }
-
         });
         this.posts = response.data;
         this.figureIfItsUsersProfile();
@@ -114,4 +113,5 @@ export default {
 
 <style scoped>
 @import "../assets/styles/Posts.css";
+@import "../assets/styles/Main.css";
 </style>

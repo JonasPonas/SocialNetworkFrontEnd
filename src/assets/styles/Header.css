@@ -1,84 +1,84 @@
 #nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: #212020;
-    margin: 0;
-    display: flex;
-    flex-direction: row-reverse;
-    z-index: 50;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #212020;
+  margin: 0;
+  display: flex;
+  flex-direction: row-reverse;
+  z-index: 50;
 }
 
 button {
-    background: none;
-    border: none;
+  background: none;
+  border: none;
 }
 
 #nav #buttons-and-input {
-    flex: 1;
-    display: flex;
-    justify-content: flex-start;
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
 }
 
 #nav .half {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 #nav .half button {
-    color: white;
-    text-align: center;
-    margin: 0 1rem;
-    padding: 1rem;
+  color: white;
+  text-align: center;
+  margin: 0 1rem;
+  padding: 1rem;
 }
 
 #nav #search-bar {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 #nav .profile-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 #nav .profile-wrapper button {
-    color: white;
-    margin-right: 1rem;
-    padding: 1rem;
+  color: white;
+  margin-right: 1rem;
+  padding: 1rem;
 }
 
 #nav img {
-    margin-right: 1rem;
-    height: 2.5rem;
-    width: 2.5rem;
-    border-radius: 50%;
-    object-fit: cover;
+  margin-right: 1rem;
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 @media screen and (max-width: 630px) {
-    #nav {
-        flex-direction: column;
-        padding: 0 0 0.5rem 0;
-    }
-    #nav #buttons-and-input {
-        flex-direction: column;
-        align-items: center;
-    }
-    #nav #search-bar {
-        justify-content: center;
-    }
-    #nav .profile-wrapper {
-        justify-content: center;
-    }
-    #nav .half {
-        justify-content: center;
-    }
-    #nav .half a {
-        flex: 1;
-    }
+  #nav {
+    flex-direction: column;
+    padding: 0 0 0.5rem 0;
   }
+  #nav #buttons-and-input {
+    flex-direction: column;
+    align-items: center;
+  }
+  #nav #search-bar {
+    justify-content: center;
+  }
+  #nav .profile-wrapper {
+    justify-content: center;
+  }
+  #nav .half {
+    justify-content: center;
+  }
+  #nav .half a {
+    flex: 1;
+  }
+}

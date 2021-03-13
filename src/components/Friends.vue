@@ -49,7 +49,6 @@ export default {
   justify-content: center;
   /* border: solid 1px lightgray; */
   flex-wrap: wrap;
-  margin-top: 1rem;
   margin-bottom: 1rem;
   /* height: 50%; */
   /* overflow: scroll; */
@@ -63,8 +62,8 @@ export default {
 }
 
 .friend {
-  width: 7rem;
-  height: 10rem;
+  width: 5rem;
+  height: 7rem;
   padding: 0.2rem;
   display: flex;
   flex-direction: column;
@@ -77,8 +76,8 @@ export default {
 }
 
 .friend img {
-  width: 7rem;
-  height: 10rem;
+  width: 3rem;
+  height: 5rem;
   overflow: hidden;
   object-fit: cover;
 }

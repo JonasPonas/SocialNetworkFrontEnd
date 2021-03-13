@@ -1,19 +1,31 @@
 <template>
   <div>
-    <feedHeader></feedHeader>
-    <posts></posts>
-    <div class="left-column" v-if="showing">
-      <Friends :friends="friendSuggestions" :title="'People you may know'" />
-    </div>
+    <feedHeader v-if="true"></feedHeader>
+    <div class="container-fluid content-wrapper">
+      <div class="row justify-content-center">
+        <div class="col-12 col-xl-2" v-if="showing">
+          <Friends
+            :friends="friendSuggestions"
+            :title="'People you may know'"
+          />
+        </div>
 
-    <Chat @showChat="showChat" :friends="friends" />
-    <ChatWindow
-      :socket="socket"
-      @closeChat="closeChat"
-      v-if="showingChatWindow"
-      :friend="friend"
-      class="chat-window"
-    />
+        <div class="col-12 col-xl-7 ml-auto">
+          <posts></posts>
+        </div>
+
+        <div class="col-12 col-xl-auto ml-auto">
+          <Chat @showChat="showChat" :friends="friends" />
+          <ChatWindow
+            :socket="socket"
+            @closeChat="closeChat"
+            v-if="showingChatWindow"
+            :friend="friend"
+            class="chat-window"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -91,7 +103,7 @@ export default {
   created() {
     this.showing = this.$route.name == "Feed" ? true : false;
     console.log(this.$route.name);
-    this.fetchFriendSuggestions();
+    if (this.showing) this.fetchFriendSuggestions();
     if (this.$store) {
       const userId = this.$store.state.account.user.id;
       this.socket.emit("register", {
@@ -108,5 +120,6 @@ export default {
   bottom: 0;
   right: 20%;
 }
+@import "../assets/styles/Main.css";
 </style>
 

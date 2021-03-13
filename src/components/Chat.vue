@@ -1,11 +1,11 @@
 <template>
-  <div class="wrapper-p">
+  <div>
     <div class="chat-wrapper">
       <p class="header">Friends</p>
       <div v-for="friend in friends" :key="friend.id">
         <div class="person">
           <img class="img-wrapper" :src="getImage(friend.imageUrl)" alt="" />
-          <p style="font-size: 20px" @click="openProfile(friend.id)">
+          <p @click="openProfile(friend.id)">
             {{ friend.name + " " + friend.surname }}
           </p>
           <div class="ml-auto">
@@ -98,6 +98,13 @@ export default {
   height: 3rem;
   border-radius: 50%;
   object-fit: cover;
+  overflow: hidden;
+}
+
+.person p {
+  max-width: 115px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   overflow: hidden;
 }
 </style>

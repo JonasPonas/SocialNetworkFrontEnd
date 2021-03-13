@@ -29,7 +29,7 @@
       class="delete-button"
       @click="deletePost(post)"
     >
-      <img src="@/assets/delete_icon.png" alt="" />
+      <b-icon icon="trash-fill" variant="danger" width="28" height="28" />
     </button>
 
     <div class="content">
