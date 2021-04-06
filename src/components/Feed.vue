@@ -4,6 +4,13 @@
     <div class="container-fluid content-wrapper">
       <div class="row justify-content-center">
         <div class="col-12 col-xl-2" v-if="showing">
+          <div
+            style="display: flex; flex-wrap-wrap;"
+          >
+            <button class="btn btn-primary" @click="fetchSuggestionsRegroup(0)">kmeans</button>
+            <button class="btn btn-primary" style="margin-left: 1rem;" @click="fetchSuggestionsRegroup(1)">hierarchy</button>
+          </div>
+
           <Friends
             :friends="friendSuggestions"
             :title="'People you may know'"
@@ -87,6 +94,18 @@ export default {
         console.log("No Friends To Suggest!");
       }
     },
+    async fetchSuggestionsRegroup(func) {
+      try {
+        let response = await axios.get(ipAddress + "/suggestions/regroup", {
+          func: func,
+        });
+        console.log(response.data);
+        this.fetchFriendSuggestions()
+        // this.friendSuggestions = response.data;
+      } catch (error) {
+        console.log("No Friends To Suggest!");
+      }
+    },
   },
   mounted() {
     if (this.$store) {
@@ -102,7 +121,6 @@ export default {
   },
   created() {
     this.showing = this.$route.name == "Feed" ? true : false;
-    console.log(this.$route.name);
     if (this.showing) this.fetchFriendSuggestions();
     if (this.$store) {
       const userId = this.$store.state.account.user.id;
@@ -110,6 +128,7 @@ export default {
         userId: userId,
       });
     }
+    // this.fetchSuggestionsRegroup()
   },
 };
 </script>
